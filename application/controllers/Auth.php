@@ -21,7 +21,45 @@ class Auth extends CI_Controller
             $this->load->view('auth/index');
             $this->load->view('templates/footer_auth');
         } else {
-            var_dump($this->input->post('username'));
+            $username = $this->input->post('username');
+            $password = $this->input->post('password');
+
+            $this->db->where('username', $username);
+            $this->db->or_where('phone_number', $username);
+            $user = $this->db->get('user')->row_array();
+            if ($user) {
+                if ($user['is_active'] == 1) {
+                    if (password_verify($password, $user['password'])) {
+                        $data = [
+                            'username' => $user['username'],
+                            'role_id' => $user['role_id']
+                        ];
+
+                        $this->session->set_userdata($data);
+
+                        if ($user['role_id'] == 1) {
+                            redirect('admin');
+                        } else {
+                            redirect('employee');
+                        }
+                    } else {
+                        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+                                                        Your Password Wrong!
+                                                        </div>');
+                        redirect('auth');
+                    }
+                } else {
+                    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+                                                        Your Account Not Ready Active!
+                                                        </div>');
+                    redirect('auth');
+                }
+            } else {
+                $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+                                                        Your Account Was Not Found!
+                                                        </div>');
+                redirect('auth');
+            }
         }
     }
 
@@ -54,8 +92,6 @@ class Auth extends CI_Controller
                 'image' => "default.jpg",
                 'created' => time()
             ];
-            var_dump($datauser);
-
             $this->db->insert('user', $datauser);
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
                                                         Your Account has been created, please wait Admin to accept!
