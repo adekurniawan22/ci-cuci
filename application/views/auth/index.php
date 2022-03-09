@@ -1,4 +1,4 @@
-<main class="main-content  mt-0">
+<main class="main-content mt-0">
     <section>
         <div class="page-header min-vh-75">
             <div class="container">
@@ -10,19 +10,29 @@
                                 <p class="mb-0">Enter your username and password.</p>
                             </div>
                             <div class="card-body">
-                                <form role="form">
+                                <?= $this->session->flashdata('message');
+                                unset($_SESSION['message']); ?>
+                                <form role="form" action="<?= base_url() ?>" method="post">
                                     <label>Username or Number phone</label>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control " placeholder="Enter Username or Number Phone" aria-label="Email" aria-describedby="email-addon">
+                                        <input type="text" class="form-control" placeholder="Enter Username or Number Phone" name="username">
+                                        <?= form_error('username', '<p style="font-size: 12px;color: red;" class="m-2">', '</p>'); ?>
                                     </div>
                                     <label>Password</label>
                                     <div class="mb-3">
-                                        <input type="email" class="form-control" placeholder="Enter Password" aria-label="Password" aria-describedby="password-addon">
+                                        <input type="password" class="form-control" placeholder="Enter Password" name="password">
+                                        <?= form_error('password', '<p style="font-size: 12px;color: red;" class="m-2">', '</p>'); ?>
                                     </div>
                                     <div class="text-center">
-                                        <button type="button" class="btn bg-gradient-info w-100 mt-4 mb-0">Sign in</button>
+                                        <button type="submit" class="btn bg-gradient-info w-100 mt-4 mb-0">Sign in</button>
                                     </div>
                                 </form>
+                            </div>
+                            <div class="card-footer text-center pt-0 px-lg-2 px-1">
+                                <p class="mb-4 text-sm mx-auto">
+                                    Don't have an account?
+                                    <a href="<?= base_url() ?>auth/signup" class="text-info text-gradient font-weight-bold">Sign up</a>
+                                </p>
                             </div>
                         </div>
                     </div>
