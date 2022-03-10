@@ -43,19 +43,19 @@ class Auth extends CI_Controller
                             redirect('employee');
                         }
                     } else {
-                        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+                        $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
                                                         Your Password Wrong!
                                                         </div>');
                         redirect('auth');
                     }
                 } else {
-                    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
                                                         Your Account Not Ready Active!
                                                         </div>');
                     redirect('auth');
                 }
             } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
                                                         Your Account Was Not Found!
                                                         </div>');
                 redirect('auth');
