@@ -5,6 +5,7 @@ class Admin extends CI_Controller
 {
     public function index()
     {
-        echo "This page Admin";
+        $data['title'] = "Menu Admin";
+        $this->load->view('admin/index', $data);
     }
 }
