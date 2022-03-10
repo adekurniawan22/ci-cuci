@@ -102,7 +102,7 @@
 
         <!-- Navbar -->
 
-        <nav class="navbar navbar-main navbar-expand-lg px-0 my-2 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+        <nav class="navbar navbar-main navbar-expand-lg px-0 my-2 me-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
             <div class="container-fluid py-1 px-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
@@ -139,6 +139,13 @@
         </nav>
         <!-- End Navbar -->
 
+        <div class="container" style="margin-left: -8px; width:97%">
+            <div class="row">
+                <div class="col">
+                    <p class="text-justify">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, libero? Quaerat animi laborum quis repellendus veniam, id similique delectus, itaque earum, aliquid cumque voluptatem sit adipisci consequuntur reiciendis odio illum neque blanditiis. Eligendi sapiente, dolore, non rerum neque praesentium quisquam accusamus aut, dignissimos magni expedita illum blanditiis? Dicta nostrum nemo ullam, quam eos quia eum voluptate sit amet commodi ab fuga obcaecati? Perferendis, quaerat debitis eum omnis laborum, libero est temporibus expedita excepturi consectetur minus. Accusamus magnam reprehenderit inventore sed velit in porro atque facilis doloremque dolores perferendis repellat cupiditate, consequuntur repellendus veritatis qui cum aut dolore ut. Cumque eaque unde doloremque animi praesentium laboriosam maxime aliquid assumenda quos. Optio temporibus ex neque deserunt laborum labore similique eius voluptatum culpa incidunt maxime, commodi dignissimos nesciunt quidem ducimus aliquid, numquam dolorem pariatur nobis tempore quae! Nisi debitis sunt perspiciatis, nam ipsa deserunt fugiat excepturi dicta tenetur fuga ullam omnis, dolores non iusto rem? Alias provident exercitationem, voluptate vero facere ullam saepe temporibus nisi illum nihil corrupti nam dolores inventore nulla dicta quasi ut, nobis officiis atque, deleniti odit dolorem. Dicta ut voluptatem ipsa nobis id temporibus neque! Repellendus, voluptates aliquam! Aliquam ducimus vel minus. Quia quos, numquam eos fuga minus mollitia?</p>
+                </div>
+            </div>
+        </div>
 
         <!-- Footer -->
         <div class="container-fluid">
