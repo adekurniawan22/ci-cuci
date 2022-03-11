@@ -1,11 +1,5 @@
 <div class="container-fluid py-4">
     <button class="btn bg-gradient-info btn-sm" data-bs-toggle="modal" data-bs-target="#addVehicle">+Add new vehicle</button>
-    <?php if (validation_errors()) { ?>
-        <div class="alert alert-danger col-4" role="alert">
-            <?= validation_errors() ?>
-        </div>
-    <?php }; ?>
-
     <?= $this->session->flashdata('message');
     unset($_SESSION['message']); ?>
     <div class="row">

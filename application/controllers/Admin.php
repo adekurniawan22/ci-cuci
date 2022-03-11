@@ -13,7 +13,7 @@ class Admin extends CI_Controller
     {
         $data['title'] = "Dashboard";
         $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/navbar');
+        $this->load->view('templates/navbar', $data);
         $this->load->view('admin/dashboard');
         $this->load->view('templates/footer');
     }
@@ -22,7 +22,7 @@ class Admin extends CI_Controller
     {
         $data['title'] = "Transaction";
         $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/navbar');
+        $this->load->view('templates/navbar', $data);
         $this->load->view('admin/transaction');
         $this->load->view('templates/footer');
     }
@@ -33,7 +33,7 @@ class Admin extends CI_Controller
         $this->db->where_not_in('username', $this->session->userdata('username'));
         $data['employees'] = $this->db->get('user')->result_array();
         $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/navbar');
+        $this->load->view('templates/navbar', $data);
         $this->load->view('admin/employees', $data);
         $this->load->view('templates/footer');
     }
@@ -42,6 +42,9 @@ class Admin extends CI_Controller
     {
         $this->form_validation->set_rules('is_active', 'Status active', 'required');
         if ($this->form_validation->run() == false) {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger col-4" role="alert">
+            Failed to edit status active!
+            </div>');
             redirect('admin/employees');
         } else {
             $a = (int)$this->input->post('is_active');
@@ -68,18 +71,20 @@ class Admin extends CI_Controller
     public function customers()
     {
         $data['title'] = "Customers";
+        $data['customers'] = $this->db->get('customer')->result_array();
         $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/navbar');
+        $this->load->view('templates/navbar', $data);
         $this->load->view('admin/customers');
         $this->load->view('templates/footer');
     }
+
 
     public function vehicles()
     {
         $data['title'] = "Vehicles";
         $data['vehicles'] = $this->db->get('vehicle')->result_array();
         $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/navbar');
+        $this->load->view('templates/navbar', $data);
         $this->load->view('admin/vehicles');
         $this->load->view('templates/footer');
     }
@@ -90,6 +95,9 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('price', 'Price', 'required|trim|numeric');
 
         if ($this->form_validation->run() == false) {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger col-4" role="alert">
+            Failed to add new vehicle!
+            </div>');
             redirect('admin/vehicles');
         } else {
             $data = array(
@@ -110,6 +118,9 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('price', 'Price', 'required|trim|numeric');
 
         if ($this->form_validation->run() == false) {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger col-4" role="alert">
+            Failed to edit vehicle!
+            </div>');
             redirect('admin/vehicles');
         } else {
             $data = array(
