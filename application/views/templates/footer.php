@@ -1,6 +1,6 @@
 <!-- Footer -->
-<div class="container-fluid">
-    <footer class="footer pt-3  bawah ">
+<!-- <div class="container-fluid">
+    <footer class="footer pt-3">
         <div class="container-fluid">
             <div class="row align-items-center justify-content-lg-between">
                 <div class="col-lg-6 mb-lg-0 mb-4">
@@ -32,7 +32,7 @@
             </div>
         </div>
     </footer>
-</div>
+</div> -->
 </main>
 <div class="fixed-plugin ">
     <div class="card shadow-lg mt-3 me-3" style="height: 380px;">

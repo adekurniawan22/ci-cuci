@@ -13,14 +13,6 @@
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <link href="<?= base_url() ?>/assets/css/nucleo-svg.css" rel="stylesheet" />
     <link id="pagestyle" href="<?= base_url() ?>/assets/css/soft-ui-dashboard.css?v=1.0.3" rel="stylesheet" />
-    <style>
-        .bawah {
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
     <title><?= $title; ?></title>
 
 </head>

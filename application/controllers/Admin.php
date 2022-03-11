@@ -24,9 +24,11 @@ class Admin extends CI_Controller
     public function employees()
     {
         $data['title'] = "Employees";
+        $this->db->where_not_in('username', $this->session->userdata('username'));
+        $data['employees'] = $this->db->get('user')->result_array();
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/navbar');
-        $this->load->view('admin/employees');
+        $this->load->view('admin/employees', $data);
         $this->load->view('templates/footer');
     }
 
@@ -46,5 +48,15 @@ class Admin extends CI_Controller
         $this->load->view('templates/navbar');
         $this->load->view('admin/vehicles');
         $this->load->view('templates/footer');
+    }
+
+    public function deleteEmployee()
+    {
+        $this->db->where('user_id', $this->input->post('user_id'));
+        $this->db->delete('user');
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+                                                        Delete Employee Success!
+                                                        </div>');
+        redirect('admin/employees');
     }
 }
