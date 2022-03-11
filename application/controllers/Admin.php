@@ -84,10 +84,10 @@ class Admin extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-
-    public function editVehicle()
+    public function addVehicle()
     {
-        $this->form_validation->set_rules('name_vehicle', 'Vehicle Name', 'required|trim');
+        $this->form_validation->set_rules('vehicle_name', 'Vehicle Name', 'required|trim');
+        $this->form_validation->set_rules('price', 'Price', 'required|trim|numeric');
 
         if ($this->form_validation->run() == false) {
             redirect('admin/vehicles');
@@ -96,11 +96,30 @@ class Admin extends CI_Controller
                 'vehicle' => $this->input->post('vehicle_name'),
                 'price'  => $this->input->post('price')
             );
+            $this->db->insert('vehicle', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-success col-4" role="alert">
+            Add Vehicle Success!
+            </div>');
+            redirect('admin/vehicles');
+        }
+    }
 
+    public function editVehicle()
+    {
+        $this->form_validation->set_rules('vehicle_name', 'Vehicle Name', 'required|trim');
+        $this->form_validation->set_rules('price', 'Price', 'required|trim|numeric');
+
+        if ($this->form_validation->run() == false) {
+            redirect('admin/vehicles');
+        } else {
+            $data = array(
+                'vehicle' => $this->input->post('vehicle_name'),
+                'price'  => $this->input->post('price')
+            );
             $this->db->where('vehicle_id', $this->input->post('vehicle_id'));
             $this->db->update('vehicle', $data);
             $this->session->set_flashdata('message', '<div class="alert alert-success col-4" role="alert">
-            Edit Employee Success!
+            Edit Vehicle Success!
             </div>');
             redirect('admin/vehicles');
         }

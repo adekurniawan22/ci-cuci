@@ -1,10 +1,11 @@
 <div class="container-fluid py-4">
-    <button class="btn bg-gradient-info btn-sm">+Add new vehicle</button>
+    <button class="btn bg-gradient-info btn-sm" data-bs-toggle="modal" data-bs-target="#addVehicle">+Add new vehicle</button>
     <?php if (validation_errors()) { ?>
         <div class="alert alert-danger col-4" role="alert">
             <?= validation_errors() ?>
         </div>
     <?php }; ?>
+
     <?= $this->session->flashdata('message');
     unset($_SESSION['message']); ?>
     <div class="row">
@@ -53,6 +54,33 @@
 
 </div>
 
+<!-- Modal Add -->
+<div class="modal fade" id="addVehicle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Vehicle</h5>
+            </div>
+            <form action="<?= base_url('admin/addVehicle') ?>" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="vehicle_name" class="form-label">Name Vehicle</label>
+                        <input type="text" class="form-control" id="vehicle_name" name="vehicle_name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="text" class="form-control" id="price" name="price">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn bg-gradient-primary">Save changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
 <!-- Modal Edit-->
 <?php foreach ($vehicles as $a) : ?>
     <div class="modal fade" id="editVehicle<?= $a['vehicle_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -64,16 +92,16 @@
                 <form action="<?= base_url('admin/editVehicle') ?>" method="post">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="name_vehicle" class="form-label">Name Vehicle</label>
-                            <input type="text" class="form-control" id="name_vehicle" name="name_vehicle" value="<?= $a['vehicle'] ?>">
+                            <label for="vehicle_name" class="form-label">Name Vehicle</label>
+                            <input type="text" class="form-control" id="vehicle_name" name="vehicle_name" value="<?= $a['vehicle'] ?>">
                         </div>
                         <div class="mb-3">
                             <label for="price" class="form-label">Price</label>
-                            <input type="text" class="form-control" id="price" value="<?= $a['price'] ?>">
+                            <input type="text" class="form-control" id="price" name="price" value="<?= $a['price'] ?>">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <input type="hidden" name="user_id" value="<?= $a['vehicle_id'] ?>">
+                        <input type="hidden" name="vehicle_id" value="<?= $a['vehicle_id'] ?>">
                         <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn bg-gradient-primary">Save changes</button>
                 </form>
