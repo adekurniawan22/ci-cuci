@@ -59,4 +59,16 @@ class Admin extends CI_Controller
                                                         </div>');
         redirect('admin/employees');
     }
+
+    public function editEmployee()
+    {
+        $a = (int)$this->input->post('is_active');
+        $this->db->set('is_active', $a);
+        $this->db->where('user_id', $this->input->post('user_id'));
+        $this->db->update('user',);
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+                                                        Edit Employee Success!
+                                                        </div>');
+        redirect('admin/employees');
+    }
 }

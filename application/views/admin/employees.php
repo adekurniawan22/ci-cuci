@@ -58,9 +58,9 @@
                                         </td>
                                         <td class="align-middle text-center text-sm">
                                             <?php if ($e['is_active'] == 1) : ?>
-                                                <span class="badge badge-sm bg-gradient-success">Active<a class="ms-1" href=""><i class="fa-regular fa-pen-to-square"></i></a></span>
+                                                <span class="badge badge-sm bg-gradient-success">Active<a class="ms-1" href="" data-bs-toggle="modal" data-bs-target="#editEmployee<?= $e['user_id'] ?>"><i class="fa-regular fa-pen-to-square"></i></a></span>
                                             <?php else : ?>
-                                                <span class="badge badge-sm bg-gradient-danger">Not Active <a class="ms-1" href=""><i class="fa-regular fa-pen-to-square"></i></a></span>
+                                                <span class="badge badge-sm bg-gradient-danger">Not Active <a class="ms-1" href="" data-bs-toggle="modal" data-bs-target="#editEmployee<?= $e['user_id'] ?>"><i class="fa-regular fa-pen-to-square"></i></a></span>
                                             <?php endif ?>
                                         </td>
                                         <td class="align-middle text-center">
@@ -84,16 +84,56 @@
 
 </div>
 
-<!-- Modal -->
+<!-- Modal Edit-->
+<?php foreach ($employees as $a) : ?>
+    <div class="modal fade" id="editEmployee<?= $a['user_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Status Account</h5>
+                </div>
+                <form action="<?= base_url('admin/editEmployee') ?>" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" <?php if ($a['is_active'] == 1) {
+                                                                                    echo "checked";
+                                                                                } ?> name="is_active" id="is_active" value="1" required>
+                                <label class="form-check-label">
+                                    Active
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" <?php if ($a['is_active'] == 0) {
+                                                                                    echo "checked";
+                                                                                } ?> name="is_active" id="is_active" value="0">
+                                <label class="form-check-label">
+                                    No Active
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="user_id" value="<?= $a['user_id'] ?>">
+                        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn bg-gradient-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+<?php endforeach; ?>
+
+
+<!-- End Modal Edit -->
+
+<!-- Modal Delete-->
 <?php foreach ($employees as $a) : ?>
     <div class="modal fade" id="deleteEmployee<?= $a['user_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Delete Account</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body">
                     Are you sure to delete this account?
@@ -109,3 +149,4 @@
         </div>
     </div>
 <?php endforeach ?>
+<!-- End Modal Delete -->
