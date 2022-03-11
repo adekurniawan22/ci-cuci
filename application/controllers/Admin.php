@@ -3,6 +3,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Admin extends CI_Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->library('form_validation');
+    }
+
     public function index()
     {
         $data['title'] = "Dashboard";
@@ -32,6 +38,33 @@ class Admin extends CI_Controller
         $this->load->view('templates/footer');
     }
 
+    public function editEmployee()
+    {
+        $this->form_validation->set_rules('is_active', 'Status active', 'required');
+        if ($this->form_validation->run() == false) {
+            redirect('admin/employees');
+        } else {
+            $a = (int)$this->input->post('is_active');
+            $this->db->set('is_active', $a);
+            $this->db->where('user_id', $this->input->post('user_id'));
+            $this->db->update('user',);
+            $this->session->set_flashdata('message', '<div class="alert alert-success col-4" role="alert">
+            Edit Employee Success!
+            </div>');
+            redirect('admin/employees');
+        }
+    }
+
+    public function deleteEmployee()
+    {
+        $this->db->where('user_id', $this->input->post('user_id'));
+        $this->db->delete('user');
+        $this->session->set_flashdata('message', '<div class="alert alert-success col-4" role="alert">
+                                                        Delete Employee Success!
+                                                        </div>');
+        redirect('admin/employees');
+    }
+
     public function customers()
     {
         $data['title'] = "Customers";
@@ -44,31 +77,42 @@ class Admin extends CI_Controller
     public function vehicles()
     {
         $data['title'] = "Vehicles";
+        $data['vehicles'] = $this->db->get('vehicle')->result_array();
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/navbar');
         $this->load->view('admin/vehicles');
         $this->load->view('templates/footer');
     }
 
-    public function deleteEmployee()
+
+    public function editVehicle()
     {
-        $this->db->where('user_id', $this->input->post('user_id'));
-        $this->db->delete('user');
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
-                                                        Delete Employee Success!
-                                                        </div>');
-        redirect('admin/employees');
+        $this->form_validation->set_rules('name_vehicle', 'Vehicle Name', 'required|trim');
+
+        if ($this->form_validation->run() == false) {
+            redirect('admin/vehicles');
+        } else {
+            $data = array(
+                'vehicle' => $this->input->post('vehicle_name'),
+                'price'  => $this->input->post('price')
+            );
+
+            $this->db->where('vehicle_id', $this->input->post('vehicle_id'));
+            $this->db->update('vehicle', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-success col-4" role="alert">
+            Edit Employee Success!
+            </div>');
+            redirect('admin/vehicles');
+        }
     }
 
-    public function editEmployee()
+    public function deleteVehicle()
     {
-        $a = (int)$this->input->post('is_active');
-        $this->db->set('is_active', $a);
-        $this->db->where('user_id', $this->input->post('user_id'));
-        $this->db->update('user',);
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
-                                                        Edit Employee Success!
+        $this->db->where('vehicle_id', $this->input->post('vehicle_id'));
+        $this->db->delete('vehicle');
+        $this->session->set_flashdata('message', '<div class="alert alert-success col-4" role="alert">
+                                                        Delete Vehicle Success!
                                                         </div>');
-        redirect('admin/employees');
+        redirect('admin/vehicles');
     }
 }

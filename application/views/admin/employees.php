@@ -1,17 +1,14 @@
-<div class="container" style="margin-left: -8px; width:97%">
-    <div class="row">
-        <div class="col">
-            <p class="text-justify">Halo, <?= $this->session->userdata('username'); ?></p>
-            <p>Selamat datang dimenu Employees</p>
-        </div>
-    </div>
-</div>
 <div class="container-fluid py-4">
+    <?php if (validation_errors()) { ?>
+        <div class="alert alert-danger col-4" role="alert">
+            <?= validation_errors() ?>
+        </div>
+    <?php }; ?>
+    <?= $this->session->flashdata('message');
+    unset($_SESSION['message']); ?>
     <div class="row">
         <div class="col-12">
             <div class="card mb-4">
-                <?= $this->session->flashdata('message');
-                unset($_SESSION['message']); ?>
                 <div class="card-header pb-0">
                     <h6>Employees table</h6>
                 </div>
