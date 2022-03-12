@@ -25,7 +25,7 @@
                                             <span class="ms-3 text-secondary text-xs font-weight-bold"><?= $r['name'] ?></span>
                                         </td>
                                         <td>
-                                            <span class="ms-3 text-secondary text-xs font-weight-bold"><?= $r['address'] ?></span>
+                                            <span class=" text-secondary text-xs font-weight-bold"><?= $r['address'] ?></span>
                                         </td>
                                         <td>
                                             <span class="text-secondary text-xs font-weight-bold"><?= $r['phone_number'] ?></span>

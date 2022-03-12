@@ -36,7 +36,7 @@ class Admin extends CI_Controller
 
     public function transaction()
     {
-        $data['title'] = "Transaction";
+        $data['title'] = "Transactions";
 
         //Get nota
         $this->db->select('transaction_id,time');

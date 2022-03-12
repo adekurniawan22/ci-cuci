@@ -8,7 +8,7 @@
     .card {
         align-items: center;
         width: 22%;
-        box-shadow: 5px 10px #888888;
+        box-shadow: 0px 2px 3px #888888;
     }
 </style>
 <div class="container">
