@@ -1,8 +1,37 @@
-<div class="container" style="margin-left: -8px; width:97%">
-    <div class="row">
-        <div class="col">
-            <p class="text-justify">Halo, <?= $this->session->userdata('username'); ?></p>
-            <p>Selamat datang dimenu Admin</p>
-        </div>
+<style>
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 20px;
+    }
+
+    .card {
+        align-items: center;
+        width: 22%;
+        box-shadow: 5px 10px #888888;
+    }
+</style>
+<div class="container">
+    <div class="card text-center p-4 me-3">
+        <h4><?= $employees ?></h4>
+        <h4>Employees</h4>
     </div>
+    <div class="card text-center p-4 me-3">
+        <h4><?= $customers ?></h4>
+        <h4>Customers</h4>
+    </div>
+    <div class="card text-center p-4 me-3">
+        <h4><?= $transactions ?></h4>
+        <h4>Transactions</h4>
+    </div>
+    <div class="card text-center p-4 me-3">
+        <h4>Income</h4>
+        <?php
+        $jincome = 0;
+        foreach ($income as $a) {
+            $jincome += $a['amount'] * $a['price'];
+        }  ?>
+        <h4>Rp. <?= $jincome ?></h4>
+    </div>
+
 </div>

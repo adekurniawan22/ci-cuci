@@ -11,6 +11,22 @@ class Admin extends CI_Controller
 
     public function index()
     {
+        //get amount of employee
+        $this->db->where_not_in('role_id', 1);
+        $data['employees'] = $this->db->count_all_results('user');
+
+        //get customer
+        $data['customers'] = $this->db->count_all_results('customer');
+
+        //get transaction
+        $this->db->group_by('transaction_id');
+        $data['transactions'] = $this->db->count_all_results('transaction');
+
+        $this->db->select('*');
+        $this->db->from('transaction_details');
+        $this->db->join('vehicle', 'vehicle.vehicle_id = transaction_details.vehicle_id');
+        $data['income'] = $this->db->get()->result_array();
+
         $data['title'] = "Dashboard";
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/navbar', $data);
