@@ -22,19 +22,27 @@ class Admin extends CI_Controller
     {
         $data['title'] = "Transaction";
 
-        //Get Nota
+        //Get nota
         $this->db->select('transaction_id,time');
         $this->db->from('transaction');
-        // $this->db->join('transaction_details', 'transaction_details.transaction_details_id = transaction.transaction_details_id');
         $this->db->group_by('transaction.transaction_id');
         $data['transactions'] = $this->db->get()->result_array();
 
-
+        //get detail
         $this->db->select('*');
         $this->db->from('transaction');
         $this->db->join('transaction_details', 'transaction_details.transaction_details_id = transaction.transaction_details_id');
         $this->db->join('vehicle', 'vehicle.vehicle_id=transaction_details.vehicle_id');
         $data['details'] = $this->db->get()->result_array();
+
+        //get vehicle
+        $data['vehicles'] = $this->db->get('vehicle')->result_array();
+
+        //get employe
+        $data['users'] = $this->db->get('user')->result_array();
+
+        //get customer
+        $data['customers'] = $this->db->get('customer')->result_array();
 
         //Get
         $this->load->view('templates/sidebar', $data);

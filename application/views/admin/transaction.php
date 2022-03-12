@@ -19,10 +19,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
-                                var_dump($details);
-                                ?>
-
                                 <?php foreach ($transactions as $s) : ?>
                                     <tr>
                                         <td>
@@ -63,9 +59,37 @@
                     <h5 class="modal-title" id="exampleModalLabel">Detail Transaction</h5>
                 </div>
                 <div class="modal-body">
-                    <p>Nama karyawan</p>
-                    <p>Nama Customer</p>
-                    <p>Tanggal</p>
+                    <table cellpadding="7px">
+                        <tr>
+                            <th>Karyawan</th>
+                            <td align="center">:</td>
+                            <?php foreach ($users as $d) : ?>
+                                <?php if ($d['user_id'] == $a['user_id']) : ?>
+                                    <td> <?= $d['name'] ?> </td>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </tr>
+                        <tr>
+                            <th>Customer</th>
+                            <td align="center">:</td>
+                            <?php foreach ($customers as $e) : ?>
+                                <?php if ($e['customer_id'] == $a['customer_id']) : ?>
+                                    <td><?= $e['name'] ?> </td>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </tr>
+                        <tr>
+                            <th>Tanggal</th>
+                            <td align="center">:</td>
+                            <td><?= date("d F Y", $a['time']); ?></td>
+                        </tr>
+                        <tr>
+                            <th>Jam</th>
+                            <td align="center">:</td>
+                            <td><?= date("H:i", $a['time']); ?> WIB</td>
+                        </tr>
+                    </table>
+
                     <div class="border border-dark table-responsive">
                         <table class="table">
                             <thead class="bg-info">
@@ -78,16 +102,30 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><span class="ms-3"><?= $a['transaction_id'] ?></span></td>
-                                    <td><span class="ms-3"><?= $a['vehicle'] ?></span></td>
-                                    <td><span class="ms-3"><?= $a['price'] ?></span></td>
-                                    <td><span class="ms-3"><?= $a['jumlah'] ?></span></td>
-                                    <td><span class="ms-3">Total</span></td>
-
-                                </tr>
+                                <?php $jtotal = 0; ?>
+                                <?php foreach ($details as $b) : ?>
+                                    <?php if ($b['transaction_id'] == $a['transaction_id']) : ?>
+                                        <tr>
+                                            <td><span class="ms-3"><?= $b['transaction_id'] ?></span></td>
+                                            <?php foreach ($vehicles as $c) : ?>
+                                                <?php if ($c['vehicle_id'] == $b['vehicle_id']) : ?>
+                                                    <td><span class="ms-3"><?= $c['vehicle'] ?></span></td>
+                                                    <td><span class="ms-3">Rp. <?= $c['price'] ?></span></td>
+                                                    <td><span class="ms-3">x <?= $b['amount'] ?></span></td>
+                                                    <td><span class="ms-3">Rp. <?= $b['amount'] * $c['price'] ?></span></td>
+                                                <?php $total = $b['amount'] * $c['price'];
+                                                    $jtotal += $total;
+                                                endif; ?>
+                                            <?php endforeach; ?>
+                                        </tr>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
+                    </div>
+                    <div class="d-flex justify-content-end mt-2">
+                        <p class="text-left me-4 "><strong>Jumlah Total : Rp. <?= $jtotal ?></strong></p>
+                        <div></div>
                     </div>
                 </div>
                 <div class="modal-footer">
