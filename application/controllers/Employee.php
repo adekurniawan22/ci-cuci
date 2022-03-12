@@ -5,6 +5,10 @@ class Employee extends CI_Controller
 {
     public function index()
     {
-        echo "This page Employee";
+        $data['title'] = "Add Transaction";
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('templates/navbar', $data);
+        $this->load->view('employee/addtransaction');
+        $this->load->view('templates/footer');
     }
 }

@@ -21,9 +21,25 @@ class Admin extends CI_Controller
     public function transaction()
     {
         $data['title'] = "Transaction";
+
+        //Get Nota
+        $this->db->select('transaction_id,time');
+        $this->db->from('transaction');
+        // $this->db->join('transaction_details', 'transaction_details.transaction_details_id = transaction.transaction_details_id');
+        $this->db->group_by('transaction.transaction_id');
+        $data['transactions'] = $this->db->get()->result_array();
+
+
+        $this->db->select('*');
+        $this->db->from('transaction');
+        $this->db->join('transaction_details', 'transaction_details.transaction_details_id = transaction.transaction_details_id');
+        $this->db->join('vehicle', 'vehicle.vehicle_id=transaction_details.vehicle_id');
+        $data['details'] = $this->db->get()->result_array();
+
+        //Get
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/navbar', $data);
-        $this->load->view('admin/transaction');
+        $this->load->view('admin/transaction', $data);
         $this->load->view('templates/footer');
     }
 

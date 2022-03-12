@@ -31,11 +31,11 @@
         <hr class="horizontal dark mt-0">
         <div class="collapse navbar-collapse  w-auto  max-height-vh-100 h-75" id="sidenav-collapse-main">
             <ul class="navbar-nav">
-                <?php if ($this->session->userdata('role_id') == 1) { ?>
 
-                    <li class="nav-item mt-3">
-                        <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Main Menu</h6>
-                    </li>
+                <li class="nav-item mt-3">
+                    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Main Menu</h6>
+                </li>
+                <?php if ($this->session->userdata('role_id') == 1) { ?>
                     <li class="nav-item">
                         <a class="nav-link <?php if ($title == 'Dashboard') {
                                                 echo 'active';
@@ -84,6 +84,29 @@
                                 <i class="fa-solid fa-car-side"></i>
                             </div>
                             <span class="nav-link-text ms-1">Vehicles</span>
+                        </a>
+                    </li>
+                <?php }; ?>
+
+                <?php if ($this->session->userdata('role_id') == 2) { ?>
+                    <li class="nav-item">
+                        <a class="nav-link <?php if ($title == 'Add Transaction') {
+                                                echo 'active';
+                                            } ?> " href="<?= base_url('employee') ?>">
+                            <div class="icon  icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                                <i class="fa-solid fa-car-side"></i>
+                            </div>
+                            <span class="nav-link-text ms-1">Add Transaction</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?php if ($title == 'Add Customers') {
+                                                echo 'active';
+                                            } ?> " href="<?= base_url('employee/addcustomers') ?>">
+                            <div class="icon  icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                                <i class="fa-solid fa-car-side"></i>
+                            </div>
+                            <span class="nav-link-text ms-1">Add Customers</span>
                         </a>
                     </li>
                 <?php }; ?>
