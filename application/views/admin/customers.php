@@ -2,7 +2,7 @@
     <?= $this->session->flashdata('message');
     unset($_SESSION['message']); ?>
     <div class="row">
-        <div class="col-6">
+        <div class="col-10">
             <div class="card mb-4">
                 <div class="card-header pb-0">
                     <h6>Customers table</h6>

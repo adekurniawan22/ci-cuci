@@ -3,7 +3,7 @@
     <?= $this->session->flashdata('message');
     unset($_SESSION['message']); ?>
     <div class="row">
-        <div class="col-6">
+        <div class="col-10">
             <div class="card mb-4">
                 <div class="card-header pb-0">
                     <h6>Customers table</h6>
@@ -26,7 +26,8 @@
                                             <span class="ms-3 text-secondary text-xs font-weight-bold"><?= $c['name'] ?></span>
                                         </td>
                                         <td>
-                                            <span class="text-secondary text-xs font-weight-bold"><?= $c['address'] ?></span>
+                                            <span class=" text-secondary text-xs font-weight-bold"><?= $c['address'] ?></span>
+
                                         </td>
                                         <td>
                                             <span class="text-secondary text-xs font-weight-bold"><?= $c['phone_number'] ?></span>

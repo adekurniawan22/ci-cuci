@@ -33,8 +33,11 @@
 
                                         <td class="align-middle text-center">
 
-                                            <a href="" class="badge bg-gradient-success font-weight-bold text-xs" data-bs-toggle="modal" data-bs-target="#view<?= $s['transaction_id'] ?>">
+                                            <a href="" class="badge bg-gradient-success font-weight-bold text-xs" data-bs-toggle="modal" data-bs-target="#a<?= $s['transaction_id'] ?>">
                                                 See Detail >>
+                                            </a>
+                                            <a href="" class="badge bg-gradient-danger font-weight-bold text-xs" data-bs-toggle="modal" data-bs-target="#deleteTransaction<?= $s['transaction_id'] ?>">
+                                                <i class="fa-solid fa-trash"></i> Delete
                                             </a>
                                         </td>
                                     </tr>
@@ -50,12 +53,9 @@
 
 </div>
 
-<!-- Modal Edit-->
-<?php
-var_dump($details);
-?>
+<!-- Modal detail-->
 <?php foreach ($details as $a) : ?>
-    <div class="modal fade" id="view<?= $a['transaction_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="a<?= $a['transaction_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content ">
                 <div class="modal-header">
@@ -139,3 +139,37 @@ var_dump($details);
         </div>
     </div>
 <?php endforeach; ?>
+
+<!-- Modal Delete-->
+<?php foreach ($details as $a) : ?>
+    <div class="modal fade" id="deleteTransaction<?= $a['transaction_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Transaction</h5>
+                </div>
+                <div class="modal-body">
+                    Are you sure to delete this Transaction?
+                </div>
+                <div class="modal-footer">
+                    <form action="<?= base_url('employee/deleteTransaction') ?>" method="post">
+                        <?php $i = 1;
+                        foreach ($transaction as $z) : ?>
+                            <?php if ($z['transaction_id'] == $a['transaction_id']) : ?>
+                                <?php foreach ($transaction_details as $s) : ?>
+                                    <?php if ($s['transaction_details_id'] == $z['transaction_details_id']) : ?>
+                                        <input type="hidden" name="transaction_details_id[<?= $i++ ?>]" value="<?= $z['transaction_details_id'] ?>">
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                        <input type="hidden" name="transaction_id" value="<?= $a['transaction_id'] ?>">
+                        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn bg-gradient-primary">Yes, Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endforeach ?>
+<!-- End Modal Delete -->
