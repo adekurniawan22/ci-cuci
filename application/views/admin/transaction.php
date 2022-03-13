@@ -50,10 +50,7 @@
 
 </div>
 
-<!-- Modal Edit-->
-<?php
-var_dump($details);
-?>
+<!-- Modal Detail-->
 <?php foreach ($details as $a) : ?>
     <div class="modal fade" id="view<?= $a['transaction_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">

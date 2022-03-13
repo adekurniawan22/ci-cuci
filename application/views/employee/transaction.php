@@ -33,7 +33,7 @@
 
                                         <td class="align-middle text-center">
 
-                                            <a href="" class="badge bg-gradient-success font-weight-bold text-xs" data-bs-toggle="modal" data-bs-target="#a<?= $s['transaction_id'] ?>">
+                                            <a href="" class="badge bg-gradient-success font-weight-bold text-xs" data-bs-toggle="modal" data-bs-target="#viewTransaction<?= $s['transaction_id'] ?>">
                                                 See Detail >>
                                             </a>
                                             <a href="" class="badge bg-gradient-danger font-weight-bold text-xs" data-bs-toggle="modal" data-bs-target="#deleteTransaction<?= $s['transaction_id'] ?>">
@@ -55,7 +55,7 @@
 
 <!-- Modal detail-->
 <?php foreach ($details as $a) : ?>
-    <div class="modal fade" id="a<?= $a['transaction_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="viewTransaction<?= $a['transaction_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content ">
                 <div class="modal-header">
