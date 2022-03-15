@@ -1,9 +1,10 @@
 <?php
 if ($this->session->userdata('role_id') == 2) {
     redirect('employee');
-} else {
+}
+if (!$this->session->userdata()) {
     redirect('auth');
-};
+}
 ?>
 <style>
     .container {

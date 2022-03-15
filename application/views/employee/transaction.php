@@ -1,11 +1,13 @@
 <?php
 if ($this->session->userdata('role_id') == 1) {
     redirect('admin');
-} else {
+}
+if (!$this->session->userdata()) {
     redirect('auth');
-};
+}
 ?>
 <div class="container-fluid py-4">
+    <a href="<?= base_url('employee/addtransaction') ?>" class="btn bg-gradient-info btn-sm">+Add new Transaction</a>
     <?= $this->session->flashdata('message');
     unset($_SESSION['message']); ?>
     <div class="row">

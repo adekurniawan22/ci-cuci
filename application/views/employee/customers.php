@@ -1,9 +1,10 @@
 <?php
 if ($this->session->userdata('role_id') == 1) {
     redirect('admin');
-} else {
+}
+if (!$this->session->userdata()) {
     redirect('auth');
-};
+}
 ?>
 <div class="container-fluid py-4">
     <button class="btn bg-gradient-info btn-sm" data-bs-toggle="modal" data-bs-target="#addCustomer">+Add new customer</button>

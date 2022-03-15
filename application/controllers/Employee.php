@@ -47,6 +47,74 @@ class Employee extends CI_Controller
         $this->load->view('templates/footer');
     }
 
+    public function addtransaction()
+    {
+        $data['customers'] = $this->db->get('customer')->result_array();
+        $this->db->group_by('transaction_id');
+        $data['hnota'] = $this->db->count_all_results('transaction') + 1;
+        $data['transaction_details'] = $this->db->get_where('transaction_details', array('status' => 0))->result_array();
+        $data['vehicles'] = $this->db->get('vehicle')->result_array();
+        $data['title'] = "Add Transaction";
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('templates/navbar', $data);
+        $this->load->view('employee/addtransaction', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function inserttransactiondetail()
+    {
+        $this->form_validation->set_rules('vehicle', 'Vehicle', 'required|trim');
+        $this->form_validation->set_rules('vehicle', 'Vehicle', 'required|trim');
+
+        if ($this->form_validation->run() == false) {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger col-3" role="alert">
+                Failed to input data!
+            </div>');
+            redirect('employee/addtransaction');
+        } else {
+            $td = array(
+                'vehicle_id' => $this->input->post('vehicle'),
+                'amount' => $this->input->post('amount'),
+                'status' => 0
+            );
+            $this->db->insert('transaction_details', $td);
+            redirect('employee/addtransaction');
+        }
+    }
+
+    public function inserttransaction()
+    {
+        // var_dump($this->input->post());
+        // die;
+        foreach ($_POST['check'] as $val) {
+
+            $this->db->insert('transaction', [
+                'transaction_id' => $this->input->post('transaction_id'),
+                'transaction_details_id' => $val,
+                'user_id' => $this->session->userdata['user_id'],
+                'customer_id' => '',
+                'time' => time()
+            ]);
+        }
+
+
+        foreach ($_POST['check'] as $vall) {
+            $this->db->where('transaction_details_id', $vall);
+            $this->db->update('transaction_details', ['status' => 1]);
+        }
+
+        redirect('employee/transactioncustomer');
+    }
+
+    public function transactioncustomer()
+    {
+        $data['title'] = 'Custom';
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('templates/navbar', $data);
+        $this->load->view('employee/transactioncustomer', $data);
+        $this->load->view('templates/footer');
+    }
+
     public function deleteTransaction()
     {
         for ($i = 1; $i <= count($this->input->post('transaction_details_id')); $i++) {
