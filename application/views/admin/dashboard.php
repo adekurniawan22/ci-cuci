@@ -1,3 +1,8 @@
+<?php
+if ($this->session->userdata('role_id') != 1) {
+    redirect('employee');
+};
+?>
 <style>
     .container {
         display: flex;

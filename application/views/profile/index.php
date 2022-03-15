@@ -1,3 +1,8 @@
+<?php
+if (!$this->session->userdata('username')) {
+    redirect('auth');
+};
+?>
 <div class="container-fluid">
     <?= $this->session->flashdata('message');
     unset($_SESSION['message']); ?>
@@ -5,7 +10,7 @@
         <div class="col-8">
             <div class="card flex-row flex-wrap">
                 <div class="card-header border-0">
-                    <img width="300" src="assets/img/profile/default.jpg" alt="">
+                    <img width="300" src="assets/img/profile/<?= $user['image'] ?>" alt="">
                 </div>
                 <div class="card-block px-2 p-5">
                     <h5 class="card-title"><?= $user['name'] ?></h5>
@@ -29,7 +34,7 @@
                 <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
             </div>
             <div class="modal-body">
-                <form action="<?= base_url('profile/editProfile') ?>" method="post">
+                <form action="<?= base_url('profile/editProfile') ?>" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
@@ -44,9 +49,16 @@
                             <label for="address">Address</label>
                             <textarea class="form-control" id="address" name="address"><?= $user['address'] ?></textarea>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-4">
                             <label for="phone_number" class="form-label">Phone Number</label>
                             <input type="text" class="form-control" id="phone_number" name="phone_number" value="<?= $user['phone_number'] ?>">
+                        </div>
+                        <div class="mb-3">
+                            <div class="custom-file">
+                                <label class="custom-file-label">Choose image</label>
+                                <input type="hidden" name="imageold" value="<?= $user['image'] ?>">
+                                <input type="file" class="custom-file-input form-control" name="imagenew">
+                            </div>
                         </div>
                     </div>
             </div>

@@ -1,3 +1,13 @@
+<?php
+if ($this->session->userdata('role_id')) {
+    if ($this->session->userdata('role_id') == 1) {
+        redirect('/admin');
+    }
+    if ($this->session->userdata('role_id') == 2) {
+        redirect('/employee');
+    }
+};
+?>
 <section class="p-3 mt-3">
     <div class="container bg-cover border-bottom" style="background-image: url(<?= base_url() ?>assets/img/cover/cover.jpg);">
         <div class="row p-3">

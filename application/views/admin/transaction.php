@@ -1,3 +1,8 @@
+<?php
+if ($this->session->userdata('role_id') != 1) {
+    redirect('employee');
+};
+?>
 <div class="container-fluid py-4">
     <?= $this->session->flashdata('message');
     unset($_SESSION['message']); ?>

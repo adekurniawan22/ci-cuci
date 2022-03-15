@@ -105,7 +105,8 @@ class Auth extends CI_Controller
     {
         unset(
             $_SESSION['username'],
-            $_SESSION['role_id']
+            $_SESSION['role_id'],
+            $_SESSION['user_id'],
         );
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
                                                         Your succesced logout!

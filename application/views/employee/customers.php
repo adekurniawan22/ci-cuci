@@ -1,3 +1,8 @@
+<?php
+if ($this->session->userdata('role_id') != 2) {
+    redirect('admin');
+};
+?>
 <div class="container-fluid py-4">
     <button class="btn bg-gradient-info btn-sm" data-bs-toggle="modal" data-bs-target="#addCustomer">+Add new customer</button>
     <?= $this->session->flashdata('message');
