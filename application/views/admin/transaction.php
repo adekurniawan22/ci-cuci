@@ -1,6 +1,8 @@
 <?php
-if ($this->session->userdata('role_id') != 1) {
+if ($this->session->userdata('role_id') == 2) {
     redirect('employee');
+} else {
+    redirect('auth');
 };
 ?>
 <div class="container-fluid py-4">
