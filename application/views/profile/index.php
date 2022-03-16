@@ -1,7 +1,7 @@
 <?php
-if (!$this->session->userdata('username')) {
+if (empty($_SESSION['role_id'])) {
     redirect('auth');
-};
+}
 ?>
 <div class="container-fluid">
     <?= $this->session->flashdata('message');

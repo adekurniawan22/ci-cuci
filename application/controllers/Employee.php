@@ -103,7 +103,7 @@ class Employee extends CI_Controller
             $this->db->update('transaction_details', ['status' => 1]);
         }
 
-        redirect('employee/transactioncustomer');
+        redirect('employee');
     }
 
     public function transactioncustomer()

@@ -1,8 +1,7 @@
 <?php
 if ($this->session->userdata('role_id') == 1) {
     redirect('admin');
-}
-if (!$this->session->userdata()) {
+} elseif (empty($_SESSION['role_id'])) {
     redirect('auth');
 }
 ?>
@@ -61,17 +60,13 @@ if (!$this->session->userdata()) {
                     </tbody>
                 </table>
                 <div class="row mt-4">
-                    <div class="mb-3 col-4">
-                        <label for="address">Name Customer</label>
-                        <input class="form-control" id="address" name="address">
+                    <div class="mb-3 col-8">
+                        <label for="name">Name Customer</label>
+                        <input class="form-control" id="name" name="name">
                     </div>
                     <div class="mb-3 col-4">
-                        <label for="address">Phone number</label>
-                        <input class="form-control" id="address" name="address">
-                    </div>
-                    <div class="mb-3 col-4">
-                        <label for="address">Number Transaction</label>
-                        <input type="text" readonly class="form-control mb-2 d-inline-block" name="transaction_id" value="NOTA-<?= $hnota ?>">
+                        <label ">Number Transaction</label>
+                        <input type=" text" readonly class="form-control mb-2 d-inline-block" name="transaction_id" value="NOTA-<?= $hnota ?>">
                     </div>
                 </div>
                 <div class="col-4 float-end">

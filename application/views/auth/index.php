@@ -1,12 +1,9 @@
 <?php
-if ($this->session->userdata('role_id')) {
-    if ($this->session->userdata('role_id') == 1) {
-        redirect('/admin');
-    }
-    if ($this->session->userdata('role_id') == 2) {
-        redirect('/employee');
-    }
-};
+if ($this->session->userdata('role_id') == 1) {
+    redirect('/admin');
+} elseif ($this->session->userdata('role_id') == 2) {
+    redirect('/employee');
+}
 ?>
 <main class="main-content mt-0">
     <section>

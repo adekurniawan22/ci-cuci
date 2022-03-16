@@ -1,8 +1,7 @@
 <?php
 if ($this->session->userdata('role_id') == 2) {
     redirect('employee');
-}
-if (!$this->session->userdata()) {
+} elseif (empty($_SESSION['role_id'])) {
     redirect('auth');
 }
 ?>
