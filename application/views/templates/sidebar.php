@@ -79,23 +79,13 @@
 
                 <?php if ($this->session->userdata('role_id') == 2) { ?>
                     <li class="nav-item">
-                        <a class="nav-link <?php if ($title == 'Add Transaction') {
+                        <a class="nav-link <?php if ($title == 'Transactions') {
                                                 echo 'active';
                                             } ?> " href="<?= base_url('employee') ?>">
                             <div class="icon  icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                                 <i class="fa-solid fa-car-side"></i>
                             </div>
-                            <span class="nav-link-text ms-1">Add Transaction</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php if ($title == 'Add Customers') {
-                                                echo 'active';
-                                            } ?> " href="<?= base_url('employee/customers') ?>">
-                            <div class="icon  icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                                <i class="fa-solid fa-car-side"></i>
-                            </div>
-                            <span class="nav-link-text ms-1">Add Customers</span>
+                            <span class="nav-link-text ms-1">Transactions</span>
                         </a>
                     </li>
                 <?php }; ?>

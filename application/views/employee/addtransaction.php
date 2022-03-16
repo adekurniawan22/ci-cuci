@@ -24,7 +24,9 @@ if ($this->session->userdata('role_id') == 1) {
                     <label for="amount" class="form-label">Amount</label>
                     <input min=0 type="number" class="form-control" id="amount" name="amount">
                 </div>
-                <button type="submit" class="btn bg-gradient-primary">Add</button>
+                <a href="<?= base_url('employee') ?>" class="btn bg-gradient-primary">
+                    << Back</a>
+                        <button type="submit" class="btn bg-gradient-primary">Add</button>
             </form>
         </div>
         <div class="col-7 card">
@@ -59,18 +61,9 @@ if ($this->session->userdata('role_id') == 1) {
                             <?php endforeach ?>
                     </tbody>
                 </table>
-                <div class="row mt-4">
-                    <div class="mb-3 col-8">
-                        <label for="name">Name Customer</label>
-                        <input class="form-control" id="name" name="name">
-                    </div>
-                    <div class="mb-3 col-4">
-                        <label ">Number Transaction</label>
-                        <input type=" text" readonly class="form-control mb-2 d-inline-block" name="transaction_id" value="NOTA-<?= $hnota ?>">
-                    </div>
-                </div>
-                <div class="col-4 float-end">
-                    <button type="submit" class="btn bg-gradient-primary btn-lg float-end">Add</button>
+                <div class="col-2 float-end mt-4">
+                    <input type="text" readonly class="form-control mb-2 d-inline-block" name="transaction_id" value="NOTA-<?= $hnota ?>">
+                    <button type="submit" class="btn bg-gradient-success float-end">Make a bill</button>
                 </div>
                 </form>
             </div>

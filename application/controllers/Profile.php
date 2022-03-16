@@ -26,17 +26,17 @@ class Profile extends CI_Controller
         $this->form_validation->set_rules('address', 'Address', 'required|trim');
         $this->form_validation->set_rules('phone_number', 'Phone Number', 'required|trim|numeric');
 
+        $data['user'] = $this->db->get_where('user', ['user_id' => $this->session->userdata('user_id')])->row_array();
 
         if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger col-4" role="alert">
+            $this->session->set_flashdata('message', '<div class="alert alert-danger col-3" role="alert">
             Failed to edit profile!
             </div>');
             redirect('profile');
         } else {
 
             $imagenew = $_FILES['imagenew']['name'];
-            $imageold = $this->input->post('imageold');
-            var_dump($imagenew);
+            $image = $this->input->post('imageold');
 
             if ($imagenew) {
                 $config['allowed_types'] = 'gif|jpg|png';
@@ -46,9 +46,9 @@ class Profile extends CI_Controller
                 $this->upload->initialize($config);
 
                 if ($this->upload->do_upload('imagenew')) {
-                    if ($imageold != "default.jpg") {
+                    if ($image != "default.jpg") {
                         $path = 'assets/img/profile/';
-                        unlink(FCPATH . $path . $imageold);
+                        unlink(FCPATH . $path . $image);
                     }
                     $image = $this->upload->data('file_name');
                 } else {
@@ -67,8 +67,8 @@ class Profile extends CI_Controller
             );
             $this->db->where('user_id', $this->input->post('user_id'));
             $this->db->update('user', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success col-4" role="alert">
-            Edit Profile Success!
+            $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
+            Edit profile success!
             </div>');
             redirect('profile');
         }

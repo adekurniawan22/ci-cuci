@@ -30,7 +30,7 @@ class Admin extends CI_Controller
         $data['title'] = "Dashboard";
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/navbar', $data);
-        $this->load->view('admin/dashboard');
+        $this->load->view('admin/index');
         $this->load->view('templates/footer');
     }
 
@@ -67,7 +67,7 @@ class Admin extends CI_Controller
     public function employees()
     {
         $data['title'] = "Employees";
-        $this->db->where_not_in('username', $this->session->userdata('username'));
+        $this->db->where_not_in('role_id', 1);
         $data['employees'] = $this->db->get('user')->result_array();
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/navbar', $data);
@@ -89,7 +89,7 @@ class Admin extends CI_Controller
             $this->db->where('user_id', $this->input->post('user_id'));
             $this->db->update('user',);
             $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
-            Edit Employee Success!
+            Edit employee success!
             </div>');
             redirect('admin/employees');
         }
@@ -100,7 +100,7 @@ class Admin extends CI_Controller
         $this->db->where('user_id', $this->input->post('user_id'));
         $this->db->delete('user');
         $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
-                                                        Delete Employee Success!
+                                                        Delete employee success!
                                                         </div>');
         redirect('admin/employees');
     }
@@ -132,7 +132,7 @@ class Admin extends CI_Controller
             );
             $this->db->insert('vehicle', $data);
             $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
-            Add Vehicle Success!
+            Add vehicle success!
             </div>');
             redirect('admin/vehicles');
         }
@@ -156,7 +156,7 @@ class Admin extends CI_Controller
             $this->db->where('vehicle_id', $this->input->post('vehicle_id'));
             $this->db->update('vehicle', $data);
             $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
-            Edit Vehicle Success!
+            Edit vehicle success!
             </div>');
             redirect('admin/vehicles');
         }
@@ -167,7 +167,7 @@ class Admin extends CI_Controller
         $this->db->where('vehicle_id', $this->input->post('vehicle_id'));
         $this->db->delete('vehicle');
         $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
-                                                        Delete Vehicle Success!
+                                                        Delete vehicle success!
                                                         </div>');
         redirect('admin/vehicles');
     }

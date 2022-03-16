@@ -46,7 +46,7 @@ class Auth extends CI_Controller
                         }
                     } else {
                         $this->session->set_flashdata('message', '<div class="col-10 alert alert-danger" role="alert">
-                                                        Your password wrong!
+                                                        Your password is wrong!
                                                         </div>');
                         redirect('auth');
                     }
@@ -96,7 +96,7 @@ class Auth extends CI_Controller
             ];
             $this->db->insert('user', $datauser);
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
-                                                        Your Account has been created, please wait admin to accept!
+                                                        Your account has been created, please wait admin to accept!
                                                         </div>');
             redirect('auth');
         }
