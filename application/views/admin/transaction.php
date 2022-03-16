@@ -20,8 +20,8 @@ if ($this->session->userdata('role_id') == 2) {
                             <thead>
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tanggal</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Waktu</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Time</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                                 </tr>
                             </thead>
@@ -35,7 +35,7 @@ if ($this->session->userdata('role_id') == 2) {
                                             <span class="text-secondary text-xs font-weight-bold"><?= date("d-M-Y", $s['time']) ?></span>
                                         </td>
                                         <td>
-                                            <span class="text-secondary text-xs font-weight-bold"><?= date("H:i", $s['time']) ?></span>
+                                            <span class="text-secondary text-xs font-weight-bold"><?= date("H:i", $s['time']) ?> WIB</span>
                                         </td>
 
                                         <td class="align-middle text-center">
@@ -54,7 +54,6 @@ if ($this->session->userdata('role_id') == 2) {
         </div>
     </div>
 </div>
-
 </div>
 
 <!-- Modal Detail-->
@@ -68,7 +67,7 @@ if ($this->session->userdata('role_id') == 2) {
                 <div class="modal-body">
                     <table cellpadding="7px">
                         <tr>
-                            <th>Karyawan</th>
+                            <th>Employee</th>
                             <td align="center">:</td>
                             <?php foreach ($users as $d) : ?>
                                 <?php if ($d['user_id'] == $a['user_id']) : ?>
@@ -77,21 +76,12 @@ if ($this->session->userdata('role_id') == 2) {
                             <?php endforeach; ?>
                         </tr>
                         <tr>
-                            <th>Customer</th>
-                            <td align="center">:</td>
-                            <?php foreach ($customers as $e) : ?>
-                                <?php if ($e['customer_id'] == $a['customer_id']) : ?>
-                                    <td><?= $e['name'] ?> </td>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                        </tr>
-                        <tr>
-                            <th>Tanggal</th>
+                            <th>Date</th>
                             <td align="center">:</td>
                             <td><?= date("d F Y", $a['time']); ?></td>
                         </tr>
                         <tr>
-                            <th>Jam</th>
+                            <th>Time</th>
                             <td align="center">:</td>
                             <td><?= date("H:i", $a['time']); ?> WIB</td>
                         </tr>
@@ -101,10 +91,10 @@ if ($this->session->userdata('role_id') == 2) {
                         <table class="table">
                             <thead class="bg-info">
                                 <tr>
-                                    <th scope="col">Nomor Nota</th>
-                                    <th scope="col">Kendaraan</th>
-                                    <th scope="col">Harga</th>
-                                    <th scope="col">Jumlah</th>
+                                    <th scope="col">Bill Number</th>
+                                    <th scope="col">Vehicle</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Amount</th>
                                     <th scope="col">Total</th>
                                 </tr>
                             </thead>
@@ -131,7 +121,7 @@ if ($this->session->userdata('role_id') == 2) {
                         </table>
                     </div>
                     <div class="d-flex justify-content-end mt-2">
-                        <p class="text-left me-4 "><strong>Jumlah Total : Rp. <?= $jtotal ?></strong></p>
+                        <p class="text-left me-4 "><strong>Total Price : Rp. <?= $jtotal ?></strong></p>
                         <div></div>
                     </div>
                 </div>

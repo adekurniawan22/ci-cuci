@@ -14,7 +14,7 @@ if ($this->session->userdata('role_id') == 2) {
 
     .card {
         align-items: center;
-        width: 22%;
+        width: 30%;
         box-shadow: 0px 2px 3px #888888;
     }
 </style>
@@ -22,10 +22,6 @@ if ($this->session->userdata('role_id') == 2) {
     <div class="card text-center p-4 me-3">
         <h4><?= $employees ?></h4>
         <h4>Employees</h4>
-    </div>
-    <div class="card text-center p-4 me-3">
-        <h4><?= $customers ?></h4>
-        <h4>Customers</h4>
     </div>
     <div class="card text-center p-4 me-3">
         <h4><?= $transactions ?></h4>

@@ -57,9 +57,6 @@ class Admin extends CI_Controller
         //get employe
         $data['users'] = $this->db->get('user')->result_array();
 
-        //get customer
-        $data['customers'] = $this->db->get('customer')->result_array();
-
         //Get
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/navbar', $data);
@@ -82,7 +79,7 @@ class Admin extends CI_Controller
     {
         $this->form_validation->set_rules('is_active', 'Status active', 'required');
         if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger col-4" role="alert">
+            $this->session->set_flashdata('message', '<div class="alert alert-danger col-3" role="alert">
             Failed to edit status active!
             </div>');
             redirect('admin/employees');
@@ -91,7 +88,7 @@ class Admin extends CI_Controller
             $this->db->set('is_active', $a);
             $this->db->where('user_id', $this->input->post('user_id'));
             $this->db->update('user',);
-            $this->session->set_flashdata('message', '<div class="alert alert-success col-4" role="alert">
+            $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
             Edit Employee Success!
             </div>');
             redirect('admin/employees');
@@ -102,22 +99,11 @@ class Admin extends CI_Controller
     {
         $this->db->where('user_id', $this->input->post('user_id'));
         $this->db->delete('user');
-        $this->session->set_flashdata('message', '<div class="alert alert-success col-4" role="alert">
+        $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
                                                         Delete Employee Success!
                                                         </div>');
         redirect('admin/employees');
     }
-
-    public function customers()
-    {
-        $data['title'] = "Customers";
-        $data['customers'] = $this->db->get('customer')->result_array();
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/navbar', $data);
-        $this->load->view('admin/customers');
-        $this->load->view('templates/footer');
-    }
-
 
     public function vehicles()
     {
@@ -135,7 +121,7 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('price', 'Price', 'required|trim|numeric');
 
         if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger col-4" role="alert">
+            $this->session->set_flashdata('message', '<div class="alert alert-danger col-3" role="alert">
             Failed to add new vehicle!
             </div>');
             redirect('admin/vehicles');
@@ -145,7 +131,7 @@ class Admin extends CI_Controller
                 'price'  => $this->input->post('price')
             );
             $this->db->insert('vehicle', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success col-4" role="alert">
+            $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
             Add Vehicle Success!
             </div>');
             redirect('admin/vehicles');
@@ -158,7 +144,7 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('price', 'Price', 'required|trim|numeric');
 
         if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger col-4" role="alert">
+            $this->session->set_flashdata('message', '<div class="alert alert-danger col-3" role="alert">
             Failed to edit vehicle!
             </div>');
             redirect('admin/vehicles');
@@ -169,7 +155,7 @@ class Admin extends CI_Controller
             );
             $this->db->where('vehicle_id', $this->input->post('vehicle_id'));
             $this->db->update('vehicle', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success col-4" role="alert">
+            $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
             Edit Vehicle Success!
             </div>');
             redirect('admin/vehicles');
@@ -180,7 +166,7 @@ class Admin extends CI_Controller
     {
         $this->db->where('vehicle_id', $this->input->post('vehicle_id'));
         $this->db->delete('vehicle');
-        $this->session->set_flashdata('message', '<div class="alert alert-success col-4" role="alert">
+        $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
                                                         Delete Vehicle Success!
                                                         </div>');
         redirect('admin/vehicles');

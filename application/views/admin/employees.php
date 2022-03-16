@@ -94,7 +94,7 @@ if ($this->session->userdata('role_id') == 2) {
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Status Account</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit status active</h5>
                 </div>
                 <form action="<?= base_url('admin/editEmployee') ?>" method="post">
                     <div class="modal-body">

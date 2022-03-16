@@ -27,6 +27,7 @@ class Auth extends CI_Controller
             $this->db->where('username', $username);
             $this->db->or_where('phone_number', $username);
             $user = $this->db->get('user')->row_array();
+            var_dump($user);
             if ($user) {
                 if ($user['is_active'] == 1) {
                     if (password_verify($password, $user['password'])) {
@@ -44,20 +45,20 @@ class Auth extends CI_Controller
                             redirect('employee');
                         }
                     } else {
-                        $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
-                                                        Your Password Wrong!
+                        $this->session->set_flashdata('message', '<div class="col-10 alert alert-danger" role="alert">
+                                                        Your password wrong!
                                                         </div>');
                         redirect('auth');
                     }
                 } else {
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
-                                                        Your Account Not Ready Active!
+                    $this->session->set_flashdata('message', '<div class="col-10 alert alert-danger" role="alert">
+                                                        Your account has not been approved by admin!
                                                         </div>');
                     redirect('auth');
                 }
             } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
-                                                        Your Account Was Not Found!
+                $this->session->set_flashdata('message', '<div class="col-10 alert alert-danger" role="alert">
+                                                        Your account was not found!
                                                         </div>');
                 redirect('auth');
             }
@@ -95,7 +96,7 @@ class Auth extends CI_Controller
             ];
             $this->db->insert('user', $datauser);
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
-                                                        Your Account has been created, please wait Admin to accept!
+                                                        Your Account has been created, please wait admin to accept!
                                                         </div>');
             redirect('auth');
         }
@@ -108,7 +109,7 @@ class Auth extends CI_Controller
             $_SESSION['role_id'],
             $_SESSION['user_id'],
         );
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+        $this->session->set_flashdata('message', '<div class=" col-10 alert alert-success" role="alert">
                                                         Your succesced logout!
                                                         </div>');
         redirect('auth');
