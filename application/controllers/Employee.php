@@ -46,7 +46,6 @@ class Employee extends CI_Controller
 
     public function addtransaction()
     {
-        $data['customers'] = $this->db->get('customer')->result_array();
         $this->db->group_by('transaction_id');
         $data['hnota'] = $this->db->count_all_results('transaction') + 1;
         $data['transaction_details'] = $this->db->get_where('transaction_details', array('status' => 0))->result_array();
@@ -89,7 +88,6 @@ class Employee extends CI_Controller
                 'transaction_id' => $this->input->post('transaction_id'),
                 'transaction_details_id' => $val,
                 'user_id' => $this->session->userdata['user_id'],
-                'customer_id' => '',
                 'time' => time()
             ]);
         }
