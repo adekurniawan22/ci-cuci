@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="apple-touch-icon" sizes="76x76" href="<?= base_url() ?>/assets/img/apple-icon.png">
-    <link rel="icon" type="image/png" href="<?= base_url() ?>/assets/img/favicon.png">
+    <link rel="icon" type="image/png" href="<?= base_url() ?>/assets/img/logo/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.css" integrity="sha512-E+53kXnJyuZFSz75xSmTfCpUNj3gp9Bd80TeQQMTPJTVWDRHPOpEYczGwWtsZXvaiz27cqvhdH8U+g/NMYua3A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <link href="<?= base_url() ?>/assets/css/nucleo-icons.css" rel="stylesheet" />
@@ -23,7 +23,7 @@
         <div class="sidenav-header">
             <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
             <a class="navbar-brand m-0" href="">
-                <img src="<?= base_url() ?>/assets/img/logo-ct.png" class="navbar-brand-img h-100" alt="main_logo">
+                <img src="<?= base_url() ?>/assets/img/logo/logo.png" class="navbar-brand-img h-100" alt="main_logo">
                 <span class="ms-1 font-weight-bold">App CI CUCI</span>
             </a>
         </div>
