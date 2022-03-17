@@ -52,7 +52,7 @@ class Profile extends CI_Controller
                     }
                     $image = $this->upload->data('file_name');
                 } else {
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger col-4" role="alert">' . $this->upload->display_errors() . '
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger col-lg-4 col-sm-5" role="alert">' . $this->upload->display_errors() . '
                     </div>');
                     redirect('profile');
                 }
@@ -67,7 +67,7 @@ class Profile extends CI_Controller
             );
             $this->db->where('user_id', $this->input->post('user_id'));
             $this->db->update('user', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
+            $this->session->set_flashdata('message', '<div class="alert alert-success col-lg-3 col-sm-5" role="alert">
             Edit profile success!
             </div>');
             redirect('profile');

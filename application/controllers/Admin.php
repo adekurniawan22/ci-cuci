@@ -118,7 +118,7 @@ class Admin extends CI_Controller
     {
         $this->form_validation->set_rules('is_active', 'Status active', 'required');
         if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger col-3" role="alert">
+            $this->session->set_flashdata('message', '<div class="alert alert-danger col-lg-3 col-sm-6" role="alert">
             Failed to edit status active!
             </div>');
             redirect('admin/employees');
@@ -127,7 +127,7 @@ class Admin extends CI_Controller
             $this->db->set('is_active', $a);
             $this->db->where('user_id', $this->input->post('user_id'));
             $this->db->update('user',);
-            $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
+            $this->session->set_flashdata('message', '<div class="alert alert-success col-lg-3 col-sm-6" role="alert">
             Edit employee success!
             </div>');
             redirect('admin/employees');
@@ -138,7 +138,7 @@ class Admin extends CI_Controller
     {
         $this->db->where('user_id', $this->input->post('user_id'));
         $this->db->delete('user');
-        $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
+        $this->session->set_flashdata('message', '<div class="alert alert-success col-lg-3 col-sm-6" role="alert">
                                                         Delete employee success!
                                                         </div>');
         redirect('admin/employees');
@@ -184,7 +184,7 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('price', 'Price', 'required|trim|numeric');
 
         if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger col-3" role="alert">
+            $this->session->set_flashdata('message', '<div class="alert alert-danger col-lg-3 col-sm-6" role="alert">
             Failed to add new vehicle!
             </div>');
             redirect('admin/vehicles');
@@ -194,7 +194,7 @@ class Admin extends CI_Controller
                 'price'  => $this->input->post('price')
             );
             $this->db->insert('vehicle', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
+            $this->session->set_flashdata('message', '<div class="alert alert-success col-lg-3 col-sm-6" role="alert">
             Add vehicle success!
             </div>');
             redirect('admin/vehicles');
@@ -207,7 +207,7 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('price', 'Price', 'required|trim|numeric');
 
         if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger col-3" role="alert">
+            $this->session->set_flashdata('message', '<div class="alert alert-danger col-lg-3 col-sm-6" role="alert">
             Failed to edit vehicle!
             </div>');
             redirect('admin/vehicles');
@@ -218,7 +218,7 @@ class Admin extends CI_Controller
             );
             $this->db->where('vehicle_id', $this->input->post('vehicle_id'));
             $this->db->update('vehicle', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
+            $this->session->set_flashdata('message', '<div class="alert alert-success col-lg-3 col-sm-6" role="alert">
             Edit vehicle success!
             </div>');
             redirect('admin/vehicles');
@@ -229,7 +229,7 @@ class Admin extends CI_Controller
     {
         $this->db->where('vehicle_id', $this->input->post('vehicle_id'));
         $this->db->delete('vehicle');
-        $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
+        $this->session->set_flashdata('message', '<div class="alert alert-success col-lg-3 col-sm-6" role="alert">
                                                         Delete vehicle success!
                                                         </div>');
         redirect('admin/vehicles');

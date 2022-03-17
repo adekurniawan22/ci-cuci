@@ -6,52 +6,66 @@ if ($this->session->userdata('role_id') == 1) {
 }
 ?>
 <div class="container-fluid py-4">
-    <a href="<?= base_url('employee/addtransaction') ?>" class="btn bg-gradient-info btn-sm">+Add new Transaction</a>
     <?= $this->session->flashdata('message');
     unset($_SESSION['message']); ?>
     <div class="row">
-        <div class="col-6">
+        <div class="col-lg-6 col-sm-12">
+            <h5 class="ms-2">Transactions table</h5>
+            <a href="<?= base_url('employee/addtransaction') ?>" class="btn bg-gradient-info btn-sm">+Add new Transaction</a>
             <div class="card mb-4">
                 <div class="card-header pb-0">
-                    <h6>Transactions table</h6>
+                    <form action="<?= base_url('employee') ?>" method="post">
+                        <div class="d-flex float-start">
+                            <div>
+                                <input type="text" class="form-control" placeholder="Search Vehicle.." name="keyword">
+                            </div>
+                            <button type="submit" class="btn btn-primary" name="search">Search!</button>
+                        </div>
+                    </form>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
                         <table class="table mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Time</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($transactions as $s) : ?>
+                            <?php if (empty($transactions)) : ?>
+                                <div class="alert alert-danger col-lg-4 col-sm-6 mx-4" role="alert">
+                                    Data not found!
+                                </div>
+                            <?php else : ?>
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <span class="ms-3 text-secondary text-xs font-weight-bold"><?= $s['transaction_id'] ?></span>
-                                        </td>
-                                        <td>
-                                            <span class="text-secondary text-xs font-weight-bold"><?= date("d-M-Y", $s['time']) ?></span>
-                                        </td>
-                                        <td>
-                                            <span class="text-secondary text-xs font-weight-bold"><?= date("H:i", $s['time']) ?></span>
-                                        </td>
-
-                                        <td class="align-middle text-center">
-
-                                            <a href="" class="badge bg-gradient-success font-weight-bold text-xs" data-bs-toggle="modal" data-bs-target="#viewTransaction<?= $s['transaction_id'] ?>">
-                                                See Detail >>
-                                            </a>
-                                            <a href="" class="badge bg-gradient-danger font-weight-bold text-xs" data-bs-toggle="modal" data-bs-target="#deleteTransaction<?= $s['transaction_id'] ?>">
-                                                <i class="fa-solid fa-trash"></i> Delete
-                                            </a>
-                                        </td>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Time</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                                     </tr>
-                                <?php endforeach ?>
-                            </tbody>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($transactions as $s) : ?>
+                                        <tr>
+                                            <td>
+                                                <span class="ms-3 text-secondary text-xs font-weight-bold"><?= $s['transaction_id'] ?></span>
+                                            </td>
+                                            <td>
+                                                <span class="text-secondary text-xs font-weight-bold"><?= date("d-M-Y", $s['time']) ?></span>
+                                            </td>
+                                            <td>
+                                                <span class="text-secondary text-xs font-weight-bold"><?= date("H:i", $s['time']) ?></span>
+                                            </td>
+
+                                            <td class="align-middle text-center">
+
+                                                <a href="" class="badge bg-gradient-success font-weight-bold text-xs" data-bs-toggle="modal" data-bs-target="#viewTransaction<?= $s['transaction_id'] ?>">
+                                                    See Detail >>
+                                                </a>
+                                                <a href="" class="badge bg-gradient-danger font-weight-bold text-xs" data-bs-toggle="modal" data-bs-target="#deleteTransaction<?= $s['transaction_id'] ?>">
+                                                    <i class="fa-solid fa-trash"></i> Delete
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach ?>
+                                </tbody>
                         </table>
+                        <?= $this->pagination->create_links(); ?>
                     </div>
                 </div>
             </div>
@@ -153,7 +167,7 @@ if ($this->session->userdata('role_id') == 1) {
                 <div class="modal-footer">
                     <form action="<?= base_url('employee/deleteTransaction') ?>" method="post">
                         <?php $i = 1;
-                        foreach ($transaction as $z) : ?>
+                                    foreach ($transaction as $z) : ?>
                             <?php if ($z['transaction_id'] == $a['transaction_id']) : ?>
                                 <?php foreach ($transaction_details as $s) : ?>
                                     <?php if ($s['transaction_details_id'] == $z['transaction_details_id']) : ?>
@@ -172,3 +186,4 @@ if ($this->session->userdata('role_id') == 1) {
     </div>
 <?php endforeach ?>
 <!-- End Modal Delete -->
+<?php endif ?>

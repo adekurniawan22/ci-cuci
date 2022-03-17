@@ -7,17 +7,35 @@ class Employee extends CI_Controller
     {
         parent::__construct();
         $this->load->library('form_validation');
+        $this->load->library('pagination');
     }
 
     public function index()
     {
         $data['title'] = "Transactions";
 
-        //Get nota
-        $this->db->select('transaction_id,time');
-        $this->db->from('transaction');
-        $this->db->group_by('transaction.transaction_id');
-        $data['transactions'] = $this->db->get()->result_array();
+        if ($this->input->post('keyword')) {
+            $config['base_url'] = base_url('employee/index');
+            $config['total_rows'] = $this->db->like('transaction_id', $this->input->post('keyword'))->group_by('transaction_id')->get('transaction')->num_rows();
+            $config['per_page'] = 10;
+            $from = $this->uri->segment(3);
+            $this->pagination->initialize($config);
+
+            $this->db->select('transaction_id,time');
+            $this->db->like('transaction_id', $this->input->post('keyword'));
+            $this->db->group_by('transaction.transaction_id');
+            $data['transactions'] = $this->db->get('transaction', $config['per_page'], $from)->result_array();
+        } else {
+            $config['base_url'] = base_url('employee/index');
+            $config['total_rows'] = $this->db->group_by('transaction_id')->get('transaction')->num_rows();
+            $config['per_page'] = 5;
+            $from = $this->uri->segment(3);
+            $this->pagination->initialize($config);
+
+            $this->db->select('transaction_id,time');
+            $this->db->group_by('transaction.transaction_id');
+            $data['transactions'] = $this->db->get('transaction', $config['per_page'], $from)->result_array();
+        }
 
         //get detail
         $this->db->select('*');
@@ -96,7 +114,7 @@ class Employee extends CI_Controller
             $this->db->where('transaction_details_id', $vall);
             $this->db->update('transaction_details', ['status' => 1]);
         }
-        $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
+        $this->session->set_flashdata('message', '<div class="alert alert-success col-lg-3 col-sm-5" role="alert">
         Add transaction success!
         </div>');
         redirect('employee');
@@ -112,7 +130,7 @@ class Employee extends CI_Controller
         $this->db->where('transaction_id', $this->input->post('transaction_id'));
         $this->db->delete('transaction');
 
-        $this->session->set_flashdata('message', '<div class="alert alert-success col-3" role="alert">
+        $this->session->set_flashdata('message', '<div class="alert alert-success col-lg-3 col-sm-5" role="alert">
         Delete transaction success!
         </div>');
         redirect('employee');
