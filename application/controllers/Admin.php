@@ -37,8 +37,27 @@ class Admin extends CI_Controller
         $data['title'] = "Transactions";
 
         $config['base_url'] = base_url('admin/transaction');
-        $config['per_page'] = 10;
+        $config['per_page'] = 5;
         $from = $this->uri->segment(3);
+        $config['first_link']       = 'First';
+        $config['last_link']        = 'Last';
+        $config['next_link']        = 'Next';
+        $config['prev_link']        = 'Prev';
+        $config['full_tag_open']    = '<div class="mt-3 pagging text-center"><nav><ul class="pagination justify-content-center">';
+        $config['full_tag_close']   = '</ul></nav></div>';
+        $config['num_tag_open']     = '<li class="page-item"><span class="page-link">';
+        $config['num_tag_close']    = '</span></li>';
+        $config['cur_tag_open']     = '<li class="page-item active"><span class="page-link">';
+        $config['cur_tag_close']    = '<span class="sr-only">(current)</span></span></li>';
+        $config['next_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['next_tagl_close']  = '<span aria-hidden="true">&raquo;</span></span></li>';
+        $config['prev_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['prev_tagl_close']  = '</span>Next</li>';
+        $config['first_tag_open']   = '<li class="page-item"><span class="page-link">';
+        $config['first_tagl_close'] = '</span></li>';
+        $config['last_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['last_tagl_close']  = '</span></li>';
+
 
         //Get nota
         if ($this->input->post('keyword')) {
@@ -46,16 +65,16 @@ class Admin extends CI_Controller
             $config['total_rows'] = $this->db->like('transaction_id', $this->input->post('keyword'))->group_by('transaction_id')->get('transaction')->num_rows();
             $this->pagination->initialize($config);
 
-            $this->db->select('transaction_id,time');
-            $this->db->like('transaction_id', $this->input->post('keyword'));
-            $this->db->group_by('transaction.transaction_id');
+            $this->db->select('transaction_id,time')
+                ->like('transaction_id', $this->input->post('keyword'))
+                ->group_by('transaction.transaction_id');
             $data['transactions'] = $this->db->get('transaction', $config['per_page'], $from)->result_array();
         } else {
             $config['total_rows'] = $this->db->group_by('transaction_id')->get('transaction')->num_rows();
             $this->pagination->initialize($config);
 
-            $this->db->select('transaction_id,time');
-            $this->db->group_by('transaction.transaction_id');
+            $this->db->select('transaction_id,time')
+                ->group_by('transaction.transaction_id');
             $data['transactions'] = $this->db->get('transaction', $config['per_page'], $from)->result_array();
         }
 
@@ -82,12 +101,30 @@ class Admin extends CI_Controller
     public function employees()
     {
         $data['title'] = "Employees";
+        $config['first_link']       = 'First';
+        $config['last_link']        = 'Last';
+        $config['next_link']        = 'Next';
+        $config['prev_link']        = 'Prev';
+        $config['full_tag_open']    = '<div class="mt-3 pagging text-center"><nav><ul class="pagination justify-content-center">';
+        $config['full_tag_close']   = '</ul></nav></div>';
+        $config['num_tag_open']     = '<li class="page-item"><span class="page-link">';
+        $config['num_tag_close']    = '</span></li>';
+        $config['cur_tag_open']     = '<li class="page-item active"><span class="page-link">';
+        $config['cur_tag_close']    = '<span class="sr-only">(current)</span></span></li>';
+        $config['next_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['next_tagl_close']  = '<span aria-hidden="true">&raquo;</span></span></li>';
+        $config['prev_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['prev_tagl_close']  = '</span>Next</li>';
+        $config['first_tag_open']   = '<li class="page-item"><span class="page-link">';
+        $config['first_tagl_close'] = '</span></li>';
+        $config['last_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['last_tagl_close']  = '</span></li>';
+        $config['base_url'] = 'http://localhost/ci-cuci/admin/employees';
+        $config['per_page'] = 5;
+        $from = $this->uri->segment(3);
 
         if ($this->input->post('keyword')) {
-            $config['base_url'] = 'http://localhost/ci-cuci/admin/employees';
             $config['total_rows'] = $this->db->where_not_in('role_id', 1)->like('name', $this->input->post('keyword'))->get('user')->num_rows();
-            $config['per_page'] = 10;
-            $from = $this->uri->segment(3);
             $this->pagination->initialize($config);
 
             $this->db->where_not_in('role_id', 1);
@@ -98,10 +135,7 @@ class Admin extends CI_Controller
             $this->load->view('admin/employees', $data);
             $this->load->view('templates/footer');
         } else {
-            $config['base_url'] = 'http://localhost/ci-cuci/admin/employees';
             $config['total_rows'] = $this->db->where_not_in('role_id', 1)->get('user')->num_rows();
-            $config['per_page'] = 1;
-            $from = $this->uri->segment(3);
             $this->pagination->initialize($config);
 
             $this->db->where_not_in('role_id', 1);
@@ -146,13 +180,30 @@ class Admin extends CI_Controller
     public function vehicles()
     {
         $data['title'] = "Vehicles";
-
+        $config['base_url'] = 'http://localhost/ci-cuci/admin/vehicles';
+        $config['per_page'] = 5;
+        $config['first_link']       = 'First';
+        $config['last_link']        = 'Last';
+        $config['next_link']        = 'Next';
+        $config['prev_link']        = 'Prev';
+        $config['full_tag_open']    = '<div class="mt-3 pagging text-center"><nav><ul class="pagination justify-content-center">';
+        $config['full_tag_close']   = '</ul></nav></div>';
+        $config['num_tag_open']     = '<li class="page-item"><span class="page-link">';
+        $config['num_tag_close']    = '</span></li>';
+        $config['cur_tag_open']     = '<li class="page-item active"><span class="page-link">';
+        $config['cur_tag_close']    = '<span class="sr-only">(current)</span></span></li>';
+        $config['next_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['next_tagl_close']  = '<span aria-hidden="true">&raquo;</span></span></li>';
+        $config['prev_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['prev_tagl_close']  = '</span>Next</li>';
+        $config['first_tag_open']   = '<li class="page-item"><span class="page-link">';
+        $config['first_tagl_close'] = '</span></li>';
+        $config['last_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['last_tagl_close']  = '</span></li>';
+        $from = $this->uri->segment(3);
 
         if ($this->input->post('keyword')) {
-            $config['base_url'] = 'http://localhost/ci-cuci/admin/vehicles';
             $config['total_rows'] = $this->db->like('vehicle', $this->input->post('keyword'))->get('vehicle')->num_rows();
-            $config['per_page'] = 10;
-            $from = $this->uri->segment(3);
             $this->pagination->initialize($config);
 
             $this->db->like('vehicle', $this->input->post('keyword'));
@@ -163,10 +214,7 @@ class Admin extends CI_Controller
             $this->load->view('admin/vehicles');
             $this->load->view('templates/footer');
         } else {
-            $config['base_url'] = 'http://localhost/ci-cuci/admin/vehicles';
             $config['total_rows'] = $this->db->get('vehicle')->num_rows();
-            $config['per_page'] = 5;
-            $from = $this->uri->segment(3);
             $this->pagination->initialize($config);
 
             $data['vehicles'] = $this->db->get('vehicle', $config['per_page'], $from)->result_array();
