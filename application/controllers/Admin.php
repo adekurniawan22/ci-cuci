@@ -6,6 +6,7 @@ class Admin extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->library('pagination');
         $this->load->library('form_validation');
     }
 
@@ -36,10 +37,28 @@ class Admin extends CI_Controller
         $data['title'] = "Transactions";
 
         //Get nota
-        $this->db->select('transaction_id,time');
-        $this->db->from('transaction');
-        $this->db->group_by('transaction.transaction_id');
-        $data['transactions'] = $this->db->get()->result_array();
+        if ($this->input->post('keyword')) {
+            $config['base_url'] = base_url('admin/transaction');
+            $config['total_rows'] = $this->db->like('transaction_id', $this->input->post('keyword'))->group_by('transaction_id')->get('transaction')->num_rows();
+            $config['per_page'] = 10;
+            $from = $this->uri->segment(3);
+            $this->pagination->initialize($config);
+
+            $this->db->select('transaction_id,time');
+            $this->db->like('transaction_id', $this->input->post('keyword'));
+            $this->db->group_by('transaction.transaction_id');
+            $data['transactions'] = $this->db->get('transaction', $config['per_page'], $from)->result_array();
+        } else {
+            $config['base_url'] = 'http://localhost/ci-cuci/admin/transaction';
+            $config['total_rows'] = $this->db->group_by('transaction_id')->get('transaction')->num_rows();
+            $config['per_page'] = 5;
+            $from = $this->uri->segment(3);
+            $this->pagination->initialize($config);
+
+            $this->db->select('transaction_id,time');
+            $this->db->group_by('transaction.transaction_id');
+            $data['transactions'] = $this->db->get('transaction', $config['per_page'], $from)->result_array();
+        }
 
         //get detail
         $this->db->select('*');
@@ -64,12 +83,35 @@ class Admin extends CI_Controller
     public function employees()
     {
         $data['title'] = "Employees";
-        $this->db->where_not_in('role_id', 1);
-        $data['employees'] = $this->db->get('user')->result_array();
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/navbar', $data);
-        $this->load->view('admin/employees', $data);
-        $this->load->view('templates/footer');
+
+        if ($this->input->post('keyword')) {
+            $config['base_url'] = 'http://localhost/ci-cuci/admin/employees';
+            $config['total_rows'] = $this->db->where_not_in('role_id', 1)->like('name', $this->input->post('keyword'))->get('user')->num_rows();
+            $config['per_page'] = 10;
+            $from = $this->uri->segment(3);
+            $this->pagination->initialize($config);
+
+            $this->db->where_not_in('role_id', 1);
+            $this->db->like('name', $this->input->post('keyword'));
+            $data['employees'] = $this->db->get('user', $config['per_page'], $from)->result_array();
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/navbar', $data);
+            $this->load->view('admin/employees', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $config['base_url'] = 'http://localhost/ci-cuci/admin/employees';
+            $config['total_rows'] = $this->db->where_not_in('role_id', 1)->get('user')->num_rows();
+            $config['per_page'] = 1;
+            $from = $this->uri->segment(3);
+            $this->pagination->initialize($config);
+
+            $this->db->where_not_in('role_id', 1);
+            $data['employees'] = $this->db->get('user', $config['per_page'], $from)->result_array();
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/navbar', $data);
+            $this->load->view('admin/employees', $data);
+            $this->load->view('templates/footer');
+        }
     }
 
     public function editEmployee()
@@ -105,11 +147,35 @@ class Admin extends CI_Controller
     public function vehicles()
     {
         $data['title'] = "Vehicles";
-        $data['vehicles'] = $this->db->get('vehicle')->result_array();
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/navbar', $data);
-        $this->load->view('admin/vehicles');
-        $this->load->view('templates/footer');
+
+
+        if ($this->input->post('keyword')) {
+            $config['base_url'] = 'http://localhost/ci-cuci/admin/vehicles';
+            $config['total_rows'] = $this->db->like('vehicle', $this->input->post('keyword'))->get('vehicle')->num_rows();
+            $config['per_page'] = 10;
+            $from = $this->uri->segment(3);
+            $this->pagination->initialize($config);
+
+            $this->db->like('vehicle', $this->input->post('keyword'));
+            $data['vehicles'] = $this->db->get('vehicle', $config['per_page'], $from)->result_array();
+
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/navbar', $data);
+            $this->load->view('admin/vehicles');
+            $this->load->view('templates/footer');
+        } else {
+            $config['base_url'] = 'http://localhost/ci-cuci/admin/vehicles';
+            $config['total_rows'] = $this->db->get('vehicle')->num_rows();
+            $config['per_page'] = 5;
+            $from = $this->uri->segment(3);
+            $this->pagination->initialize($config);
+
+            $data['vehicles'] = $this->db->get('vehicle', $config['per_page'], $from)->result_array();
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/navbar', $data);
+            $this->load->view('admin/vehicles');
+            $this->load->view('templates/footer');
+        }
     }
 
     public function addVehicle()

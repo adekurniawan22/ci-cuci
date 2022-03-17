@@ -14,8 +14,14 @@ if ($this->session->userdata('role_id') == 2) {
 
     .card {
         align-items: center;
-        width: 30%;
+        width: 31%;
         box-shadow: 0px 2px 3px #888888;
+    }
+
+    @media (max-width: 518px) {
+        .card {
+            width: 29%;
+        }
     }
 </style>
 <div class="container">

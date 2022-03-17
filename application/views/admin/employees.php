@@ -15,70 +15,85 @@ if ($this->session->userdata('role_id') == 2) {
     unset($_SESSION['message']); ?>
     <div class="row">
         <div class="col-12">
+            <h5 class="ms-2">Employees table</h5>
             <div class="card mb-4">
                 <div class="card-header pb-0">
-                    <h6>Employees table</h6>
+                    <form action="<?= base_url('admin/employees') ?>" method="post">
+                        <div class="d-flex float-start">
+                            <div>
+                                <input type="text" class="form-control" placeholder="Search Vehicle.." name="keyword">
+                            </div>
+                            <button type="submit" class="btn btn-primary" name="search">Search!</button>
+                        </div>
+                    </form>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
                         <table class="table align-items-center mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Username</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Address</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Phone Number</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Gender</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Member of</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-                                    <th class="text-secondary opacity-7"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($employees as $e) : ?>
+                            <?php if (!empty($employees)) : ?>
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <div class="d-flex px-2 py-1">
-                                                <div>
-                                                    <img src="<?= base_url('assets/img/profile/') . $e['image'] ?>" class="avatar avatar-sm me-3" alt="user1">
-                                                </div>
-                                                <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm"><?= $e['name'] ?></h6>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="text-secondary text-xs font-weight-bold"><?= $e['username'] ?></span>
-                                        </td>
-                                        <td>
-                                            <span class="text-secondary text-xs font-weight-bold"><?= $e['address'] ?></span>
-                                        </td>
-                                        <td>
-                                            <span class="text-secondary text-xs font-weight-bold"><?= $e['phone_number'] ?>8</span>
-                                        </td>
-                                        <td>
-                                            <span class="text-secondary text-xs font-weight-bold"><?= $e['gender'] ?></span>
-                                        </td>
-                                        <td class="align-middle text-center text-sm">
-                                            <?php if ($e['is_active'] == 1) : ?>
-                                                <span class="badge badge-sm bg-gradient-success">Active<a class="ms-1" href="" data-bs-toggle="modal" data-bs-target="#editEmployee<?= $e['user_id'] ?>"><i class="fa-regular fa-pen-to-square"></i></a></span>
-                                            <?php else : ?>
-                                                <span class="badge badge-sm bg-gradient-danger">Not Active <a class="ms-1" href="" data-bs-toggle="modal" data-bs-target="#editEmployee<?= $e['user_id'] ?>"><i class="fa-regular fa-pen-to-square"></i></a></span>
-                                            <?php endif ?>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <span class="text-secondary text-xs font-weight-bold"><?= date("Y-m-d", $e['created']) ?></span>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <a href="" class="badge bg-gradient-danger font-weight-bold text-xs" data-bs-toggle="modal" data-bs-target="#deleteEmployee<?= $e['user_id'] ?>">
-                                                <i class="fa-solid fa-trash"></i> Delete
-                                            </a>
-                                        </td>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Username</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Address</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Phone Number</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Gender</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Member of</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+                                        <th class="text-secondary opacity-7"></th>
                                     </tr>
-                                <?php endforeach ?>
-                            </tbody>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($employees as $e) : ?>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex px-2 py-1">
+                                                    <div>
+                                                        <img src="<?= base_url('assets/img/profile/') . $e['image'] ?>" class="avatar avatar-sm me-3" alt="user1">
+                                                    </div>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm"><?= $e['name'] ?></h6>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="text-secondary text-xs font-weight-bold"><?= $e['username'] ?></span>
+                                            </td>
+                                            <td>
+                                                <span class="text-secondary text-xs font-weight-bold"><?= $e['address'] ?></span>
+                                            </td>
+                                            <td>
+                                                <span class="text-secondary text-xs font-weight-bold"><?= $e['phone_number'] ?>8</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-secondary text-xs font-weight-bold"><?= $e['gender'] ?></span>
+                                            </td>
+                                            <td class="align-middle text-center text-sm">
+                                                <?php if ($e['is_active'] == 1) : ?>
+                                                    <span class="badge badge-sm bg-gradient-success">Active<a class="ms-1" href="" data-bs-toggle="modal" data-bs-target="#editEmployee<?= $e['user_id'] ?>"><i class="fa-regular fa-pen-to-square"></i></a></span>
+                                                <?php else : ?>
+                                                    <span class="badge badge-sm bg-gradient-danger">Not Active <a class="ms-1" href="" data-bs-toggle="modal" data-bs-target="#editEmployee<?= $e['user_id'] ?>"><i class="fa-regular fa-pen-to-square"></i></a></span>
+                                                <?php endif ?>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                <span class="text-secondary text-xs font-weight-bold"><?= date("Y-m-d", $e['created']) ?></span>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                <a href="" class="badge bg-gradient-danger font-weight-bold text-xs" data-bs-toggle="modal" data-bs-target="#deleteEmployee<?= $e['user_id'] ?>">
+                                                    <i class="fa-solid fa-trash"></i> Delete
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach ?>
+                                </tbody>
                         </table>
+                        <?= $this->pagination->create_links(); ?>
+                    <?php else : ?>
+                        <div class="alert alert-danger col-4 mx-4" role="alert">
+                            Data not found!
+                        </div>
+                    <?php endif ?>
                     </div>
                 </div>
             </div>

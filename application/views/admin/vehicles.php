@@ -6,46 +6,62 @@ if ($this->session->userdata('role_id') == 2) {
 }
 ?>
 <div class="container-fluid py-4">
-    <button class="btn bg-gradient-info btn-sm" data-bs-toggle="modal" data-bs-target="#addVehicle">+Add new vehicle</button>
     <?= $this->session->flashdata('message');
     unset($_SESSION['message']); ?>
     <div class="row">
-        <div class="col-6">
+        <div class="col-lg-6 col-sm-12">
+            <h5 class="ms-2">Vehicles table</h5>
+            <button class="btn bg-gradient-info btn-sm" data-bs-toggle="modal" data-bs-target="#addVehicle">+Add new vehicle</button>
             <div class="card mb-4">
                 <div class="card-header pb-0">
-                    <h6>Vehicles table</h6>
+                    <form action="<?= base_url('admin/vehicles') ?>" method="post">
+                        <div class="d-flex float-start">
+                            <div>
+                                <input type="text" class="form-control" placeholder="Search Vehicle.." name="keyword">
+                            </div>
+                            <button type="submit" class="btn btn-primary" name="search">Search!</button>
+                        </div>
+                    </form>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
+
                         <table class="table mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Vehicle</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Price</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($vehicles as $v) : ?>
+                            <?php if (!empty($vehicles)) : ?>
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <span class="ms-3 text-secondary text-xs font-weight-bold"><?= $v['vehicle'] ?></span>
-                                        </td>
-                                        <td>
-                                            <span class="text-secondary text-xs font-weight-bold">Rp. <?= $v['price'] ?></span>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <a href="" class="badge bg-gradient-success font-weight-bold text-xs" data-bs-toggle="modal" data-bs-target="#editVehicle<?= $v['vehicle_id'] ?>">
-                                                <i class="fa-solid fa-edit"></i> Edit
-                                            </a>
-                                            <a href="" class="badge bg-gradient-danger font-weight-bold text-xs" data-bs-toggle="modal" data-bs-target="#deleteVehicle<?= $v['vehicle_id'] ?>">
-                                                <i class="fa-solid fa-trash"></i> Delete
-                                            </a>
-                                        </td>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Vehicle</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Price</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                                     </tr>
-                                <?php endforeach ?>
-                            </tbody>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($vehicles as $v) : ?>
+                                        <tr>
+                                            <td>
+                                                <span class="ms-3 text-secondary text-xs font-weight-bold"><?= $v['vehicle'] ?></span>
+                                            </td>
+                                            <td>
+                                                <span class="text-secondary text-xs font-weight-bold">Rp. <?= $v['price'] ?></span>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                <a href="" class="badge bg-gradient-success font-weight-bold text-xs" data-bs-toggle="modal" data-bs-target="#editVehicle<?= $v['vehicle_id'] ?>">
+                                                    <i class="fa-solid fa-edit"></i> Edit
+                                                </a>
+                                                <a href="" class="badge bg-gradient-danger font-weight-bold text-xs" data-bs-toggle="modal" data-bs-target="#deleteVehicle<?= $v['vehicle_id'] ?>">
+                                                    <i class="fa-solid fa-trash"></i> Delete
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach ?>
+                                </tbody>
                         </table>
+                        <?= $this->pagination->create_links(); ?>
+                    <?php else : ?>
+                        <div class="alert alert-danger col-4 mx-4" role="alert">
+                            Data not found!
+                        </div>
+                    <?php endif ?>
                     </div>
                 </div>
             </div>
