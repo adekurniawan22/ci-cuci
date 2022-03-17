@@ -36,12 +36,14 @@ class Admin extends CI_Controller
     {
         $data['title'] = "Transactions";
 
+        $config['base_url'] = base_url('admin/transaction');
+        $config['per_page'] = 10;
+        $from = $this->uri->segment(3);
+
         //Get nota
         if ($this->input->post('keyword')) {
-            $config['base_url'] = base_url('admin/transaction');
+
             $config['total_rows'] = $this->db->like('transaction_id', $this->input->post('keyword'))->group_by('transaction_id')->get('transaction')->num_rows();
-            $config['per_page'] = 10;
-            $from = $this->uri->segment(3);
             $this->pagination->initialize($config);
 
             $this->db->select('transaction_id,time');
@@ -49,10 +51,7 @@ class Admin extends CI_Controller
             $this->db->group_by('transaction.transaction_id');
             $data['transactions'] = $this->db->get('transaction', $config['per_page'], $from)->result_array();
         } else {
-            $config['base_url'] = 'http://localhost/ci-cuci/admin/transaction';
             $config['total_rows'] = $this->db->group_by('transaction_id')->get('transaction')->num_rows();
-            $config['per_page'] = 5;
-            $from = $this->uri->segment(3);
             $this->pagination->initialize($config);
 
             $this->db->select('transaction_id,time');
