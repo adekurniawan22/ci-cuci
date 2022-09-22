@@ -1,17 +1,3 @@
-<footer class="footer mt-2  p-2 bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-8 mx-auto text-center mt-1">
-                <p class="mb-0 text-secondary">
-                    Copyright © <script>
-                        document.write(new Date().getFullYear())
-                    </script> Soft by Creative Tim.
-                </p>
-            </div>
-        </div>
-    </div>
-</footer>
-
 <script src="<?= base_url() ?>/assets/js/core/popper.min.js"></script>
 <script src="<?= base_url() ?>/assets/js/core/bootstrap.min.js"></script>
 <script src="<?= base_url() ?>/assets/js/plugins/perfect-scrollbar.min.js"></script>
