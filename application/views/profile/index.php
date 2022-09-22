@@ -19,6 +19,7 @@ if (empty($_SESSION['role_id'])) {
                     <p class="card-text">Phone Number : <?= $user['phone_number'] ?></p>
                     <p class="card-text">Member of : <?= date('d-F-Y ', $user['created']) ?></p>
                     <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfile<?= $user['username'] ?>">Edit Profile</a>
+                    <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPassword<?= $user['username'] ?>">Edit Password</a>
                 </div>
             </div>
         </div>
@@ -26,7 +27,7 @@ if (empty($_SESSION['role_id'])) {
 </div>
 
 
-<!-- Modal -->
+<!-- Modal Ubah Profile-->
 <div class="modal fade" id="editProfile<?= $user['username'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -59,6 +60,36 @@ if (empty($_SESSION['role_id'])) {
                                 <input type="hidden" name="imageold" value="<?= $user['image'] ?>">
                                 <input type="file" class="custom-file-input form-control" name="imagenew">
                             </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn bg-gradient-primary">Edit</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal edit Password -->
+<div class="modal fade" id="editPassword<?= $user['username'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Password</h5>
+            </div>
+            <div class="modal-body">
+                <form action="<?= base_url('profile/editPassword') ?>" method="post" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="mb-4">
+                            <label for="passwordLama" class="form-label">Masukkan Password Lama</label>
+                            <input type="hidden" value="<?= $user['user_id'] ?>" name="user_id">
+                            <input type="text" class="form-control" id="passwordLama" name="passwordLama">
+                        </div>
+                        <div class="mb-4">
+                            <label for="passwordBaru" class="form-label">Masukkan Password Baru</label>
+                            <input type="text" class="form-control" id="passwordBaru" name="passwordBaru">
                         </div>
                     </div>
             </div>

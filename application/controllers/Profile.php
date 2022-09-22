@@ -73,4 +73,45 @@ class Profile extends CI_Controller
             redirect('profile');
         }
     }
+
+    public function editPassword()
+    {
+        $this->form_validation->set_rules('passwordLama', 'Password Lama', 'required|trim');
+        $this->form_validation->set_rules('passwordBaru', 'Password Baru', 'required|trim');
+
+        if ($this->form_validation->run() == false) {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger col-lg-4 col-sm-6" role="alert">
+                The form must be filled!
+            </div>');
+            redirect('/profile');
+        } else {
+            $data = array(
+                'password' => password_hash($this->input->post('passwordBaru'), PASSWORD_DEFAULT)
+            );
+
+            $user = $this->db->get_where('user', ['user_id' => $this->session->userdata('user_id')])->row_array();
+
+            if (password_verify($this->input->post('passwordLama'), $user['password'])) {
+                if (!password_verify($this->input->post('passwordBaru'), $user['password'])) {
+                    $this->db->where('user_id', $this->input->post('user_id'));
+                    $this->db->update('user', $data);
+
+                    $this->session->set_flashdata('message', '<div class="alert alert-success col-lg-4 col-sm-6" role="alert">
+                    Change password success!
+                        </div>');
+                    redirect('/profile');
+                } else {
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger col-lg-4 col-sm-6" role="alert">
+                        Password same!
+                        </div>');
+                    redirect('/profile');
+                }
+            } else {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger col-lg-4 col-sm-6" role="alert">
+                    Failed!
+                    </div>');
+                redirect('/profile');
+            }
+        }
+    }
 }
