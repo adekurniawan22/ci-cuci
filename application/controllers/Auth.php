@@ -9,27 +9,24 @@ class Auth extends CI_Controller
         $this->load->library('form_validation');
     }
 
-    public function index()
+    public function login()
     {
-        //set rules form validation
-        $this->form_validation->set_rules('username', 'Username or Numberphone', 'required|trim');
+        $this->form_validation->set_rules('username', 'Username', 'required|trim');
         $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[3]');
 
         if ($this->form_validation->run() == false) {
-            $data['title'] = "Sign In";
-            $this->load->view('templates/header_auth', $data);
-            $this->load->view('auth/index');
-            $this->load->view('templates/footer_auth');
+            $data['title'] = "Login";
+            $this->load->view('templates/auth/header', $data);
+            $this->load->view('auth/login');
+            $this->load->view('templates/auth/footer');;
         } else {
             $username = $this->input->post('username');
             $password = $this->input->post('password');
 
             $this->db->where('username', $username);
-            $this->db->or_where('phone_number', $username);
             $user = $this->db->get('user')->row_array();
-            var_dump($user);
             if ($user) {
-                if ($user['is_active'] == 1) {
+                if ($user['status_aktif'] == 1) {
                     if (password_verify($password, $user['password'])) {
                         $data = [
                             'username' => $user['username'],
@@ -41,64 +38,36 @@ class Auth extends CI_Controller
 
                         if ($user['role_id'] == 1) {
                             redirect('admin');
-                        } else {
-                            redirect('employee');
+                        } elseif ($user['role_id'] == 2) {
+                            redirect('pendaftaran');
                         }
                     } else {
-                        $this->session->set_flashdata('message', '<div class="col-10 alert alert-danger" role="alert">
-                                                        Your password is wrong!
-                                                        </div>');
-                        redirect('auth');
+                        $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+                        <div class="d-flex justify-content-between align-items-center">
+                        Password kamu salah!
+                            <i class="bi bi-exclamation-circle-fill"></i>
+                        </div>
+                    </div>');
+                        redirect(base_url());
                     }
                 } else {
-                    $this->session->set_flashdata('message', '<div class="col-10 alert alert-danger" role="alert">
-                                                        Your account has not been approved by admin!
-                                                        </div>');
-                    redirect('auth');
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+                    <div class="d-flex justify-content-between align-items-center">
+                        Akun kamu sudah tidak aktif!!
+                        <i class="bi bi-exclamation-circle-fill"></i>
+                    </div>
+                </div>');
+                    redirect(base_url());
                 }
             } else {
-                $this->session->set_flashdata('message', '<div class="col-10 alert alert-danger" role="alert">
-                                                        Your account was not found!
-                                                        </div>');
-                redirect('auth');
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+                <div class="d-flex justify-content-between align-items-center">
+                    Akun tidak ditemukan!
+                    <i class="bi bi-exclamation-circle-fill"></i>
+                </div>
+            </div>');
+                redirect(base_url());
             }
-        }
-    }
-
-    public function signup()
-    {
-        $this->form_validation->set_rules('name', 'Fullname', 'required|trim');
-        $this->form_validation->set_rules('gender', 'Gender', 'required');
-        $this->form_validation->set_rules('username', 'Username', 'required|trim|is_unique[user.username]');
-        $this->form_validation->set_rules('phone_number', 'Phone Number', 'required|trim|min_length[3]|integer');
-        $this->form_validation->set_rules('address', 'Address', 'required|trim|min_length[3]');
-        $this->form_validation->set_rules('password1', 'Password', 'required|trim|min_length[4]|matches[password2]');
-        $this->form_validation->set_rules('password2', 'Confirm Password', 'required|trim|min_length[4]|matches[password1]');
-
-        if ($this->form_validation->run() == false) {
-            $data['title'] = "Sign Up";
-            $this->load->view('templates/header_auth', $data);
-            $this->load->view('auth/signup');
-            $this->load->view('templates/footer_auth');
-        } else {
-
-            $datauser  = [
-                'role_id' => 2,
-                'username' => $this->input->post('username'),
-                'password' => password_hash($this->input->post('password1'), PASSWORD_DEFAULT),
-                'name' => $this->input->post('name'),
-                'address' => $this->input->post('address'),
-                'phone_number' => $this->input->post('phone_number'),
-                'gender' => $this->input->post('gender'),
-                'is_active' => 0,
-                'image' => "default.jpg",
-                'created' => time()
-            ];
-            $this->db->insert('user', $datauser);
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
-                                                        Your account has been created, please wait admin to accept!
-                                                        </div>');
-            redirect('auth');
         }
     }
 
@@ -109,9 +78,13 @@ class Auth extends CI_Controller
             $_SESSION['role_id'],
             $_SESSION['user_id'],
         );
-        $this->session->set_flashdata('message', '<div class=" col-10 alert alert-success" role="alert">
-                                                        Your succesced logout!
-                                                        </div>');
-        redirect('auth');
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+        <div class="d-flex justify-content-between align-items-center">
+            Kamu berhasil Logout!
+            <i class="bi bi-check-circle-fill"></i> <!-- Menggunakan ikon tanda centang -->
+        </div>
+    </div>
+    ');
+        redirect(base_url());
     }
 }

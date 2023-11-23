@@ -1,46 +1,37 @@
-<?php
-if ($this->session->userdata('role_id') == 2) {
-    redirect('employee');
-} elseif (empty($_SESSION['role_id'])) {
-    redirect('auth');
-}
-?>
-<style>
-    .container {
-        display: flex;
-        flex-wrap: wrap;
-        padding: 20px;
-    }
+<main id="main" class="main">
 
-    .card {
-        align-items: center;
-        width: 31%;
-        box-shadow: 0px 2px 3px #888888;
-    }
+    <div class="pagetitle">
+        <h1>Dashboard User</h1>
+    </div><!-- End Page Title -->
 
-    @media (max-width: 518px) {
-        .card {
-            width: 29%;
-        }
-    }
-</style>
-<div class="container">
-    <div class="card text-center p-4 me-3">
-        <h4><?= $employees ?></h4>
-        <h4>Employees</h4>
-    </div>
-    <div class="card text-center p-4 me-3">
-        <h4><?= $transactions ?></h4>
-        <h4>Transactions</h4>
-    </div>
-    <div class="card text-center p-4 me-3">
-        <h4>Income</h4>
-        <?php
-        $jincome = 0;
-        foreach ($income as $a) {
-            $jincome += $a['amount'] * $a['price'];
-        }  ?>
-        <h4>Rp. <?= $jincome ?></h4>
-    </div>
+    <section class="section dashboard my-3">
+        <div class="row">
 
-</div>
+            <!-- Left side columns -->
+            <div class="col-lg-12">
+                <div class="row">
+                    <?php foreach ($result as $count) : ?>
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="card info-card sales-card">
+
+                                <div class="card-body">
+                                    <h5 class="card-title"><?= $count->nama_role ?></h5>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-people"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6><?= $count->jumlah_user ?></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- End Sales Card -->
+                    <?php endforeach ?>
+                </div>
+            </div><!-- End Left side columns -->
+        </div>
+    </section>
+
+</main><!-- End #main -->

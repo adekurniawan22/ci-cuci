@@ -6,279 +6,371 @@ class Admin extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->library('pagination');
         $this->load->library('form_validation');
     }
 
     public function index()
     {
-        //get amount of employee
-        $this->db->where_not_in('role_id', 1);
-        $data['employees'] = $this->db->count_all_results('user');
+        if ($this->session->userdata('role_id') != 1) {
+            $this->load->view('errors/html/error_403'); // Menampilkan halaman error 403
+            return;
+        }
 
-        //get transaction
-        $this->db->group_by('transaction_id');
-        $data['transactions'] = $this->db->count_all_results('transaction');
-
-        $this->db->select('*');
-        $this->db->from('transaction_details');
-        $this->db->join('vehicle', 'vehicle.vehicle_id = transaction_details.vehicle_id');
-        $data['income'] = $this->db->get()->result_array();
+        $this->db->select('role.nama_role, COUNT(user.role_id) as jumlah_user');
+        $this->db->from('role');
+        $this->db->join('user', 'role.role_id = user.role_id', 'left');
+        $this->db->where_in('role.role_id', array(2, 3, 4, 5, 6, 7));
+        $this->db->group_by('role.nama_role');
+        $query = $this->db->get();
+        $result = $query->result(); // Simpan hasil query ke dalam variabel
 
         $data['title'] = "Dashboard";
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/navbar', $data);
-        $this->load->view('admin/index');
-        $this->load->view('templates/footer');
+        $this->load->view('templates/main/header', $data);
+        $this->load->view('admin/sidebar', $data);
+        $this->load->view('admin/index', ['result' => $result]); // Kirim hasil query ke tampilan
+        $this->load->view('templates/main/footer');
     }
 
-    public function transaction()
+
+    public function user()
     {
-        $data['title'] = "Transactions";
-
-        $config['base_url'] = base_url('admin/transaction');
-        $config['per_page'] = 5;
-        $from = $this->uri->segment(3);
-        $config['first_link']       = 'First';
-        $config['last_link']        = 'Last';
-        $config['next_link']        = 'Next';
-        $config['prev_link']        = 'Prev';
-        $config['full_tag_open']    = '<div class="mt-3 pagging text-center"><nav><ul class="pagination justify-content-center">';
-        $config['full_tag_close']   = '</ul></nav></div>';
-        $config['num_tag_open']     = '<li class="page-item"><span class="page-link">';
-        $config['num_tag_close']    = '</span></li>';
-        $config['cur_tag_open']     = '<li class="page-item active"><span class="page-link">';
-        $config['cur_tag_close']    = '<span class="sr-only">(current)</span></span></li>';
-        $config['next_tag_open']    = '<li class="page-item"><span class="page-link">';
-        $config['next_tagl_close']  = '<span aria-hidden="true">&raquo;</span></span></li>';
-        $config['prev_tag_open']    = '<li class="page-item"><span class="page-link">';
-        $config['prev_tagl_close']  = '</span>Next</li>';
-        $config['first_tag_open']   = '<li class="page-item"><span class="page-link">';
-        $config['first_tagl_close'] = '</span></li>';
-        $config['last_tag_open']    = '<li class="page-item"><span class="page-link">';
-        $config['last_tagl_close']  = '</span></li>';
-
-
-        //Get nota
-        if ($this->input->post('keyword')) {
-
-            $config['total_rows'] = $this->db->like('transaction_id', $this->input->post('keyword'))->group_by('transaction_id')->get('transaction')->num_rows();
-            $this->pagination->initialize($config);
-
-            $this->db->select('transaction_id,time')
-                ->like('transaction_id', $this->input->post('keyword'))
-                ->group_by('transaction.transaction_id');
-            $data['transactions'] = $this->db->get('transaction', $config['per_page'], $from)->result_array();
-        } else {
-            $config['total_rows'] = $this->db->group_by('transaction_id')->get('transaction')->num_rows();
-            $this->pagination->initialize($config);
-
-            $this->db->select('transaction_id,time')
-                ->group_by('transaction.transaction_id');
-            $data['transactions'] = $this->db->get('transaction', $config['per_page'], $from)->result_array();
+        if ($this->session->userdata('role_id') != 1) {
+            $this->load->view('errors/html/error_403'); // Menampilkan halaman error 403
+            return;
         }
 
-        //get detail
-        $this->db->select('*');
-        $this->db->from('transaction');
-        $this->db->join('transaction_details', 'transaction_details.transaction_details_id = transaction.transaction_details_id');
-        $this->db->join('vehicle', 'vehicle.vehicle_id=transaction_details.vehicle_id');
-        $data['details'] = $this->db->get()->result_array();
+        $this->db->select('user.*, role.nama_role');
+        $this->db->from('user');
+        $this->db->join('role', 'user.role_id = role.role_id');
+        $this->db->where('user.role_id !=', 1);
+        $data['users'] = $this->db->get()->result_array();
 
-        //get vehicle
-        $data['vehicles'] = $this->db->get('vehicle')->result_array();
-
-        //get employe
-        $data['users'] = $this->db->get('user')->result_array();
-
-        //Get
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/navbar', $data);
-        $this->load->view('admin/transaction', $data);
-        $this->load->view('templates/footer');
+        $data['title'] = "Manajemen User";
+        $this->load->view('templates/main/header', $data);
+        $this->load->view('admin/sidebar', $data);
+        $this->load->view('admin/user');
+        $this->load->view('templates/main/footer');
     }
 
-    public function employees()
+    public function tambah_user()
     {
-        $data['title'] = "Employees";
-        $config['first_link']       = 'First';
-        $config['last_link']        = 'Last';
-        $config['next_link']        = 'Next';
-        $config['prev_link']        = 'Prev';
-        $config['full_tag_open']    = '<div class="mt-3 pagging text-center"><nav><ul class="pagination justify-content-center">';
-        $config['full_tag_close']   = '</ul></nav></div>';
-        $config['num_tag_open']     = '<li class="page-item"><span class="page-link">';
-        $config['num_tag_close']    = '</span></li>';
-        $config['cur_tag_open']     = '<li class="page-item active"><span class="page-link">';
-        $config['cur_tag_close']    = '<span class="sr-only">(current)</span></span></li>';
-        $config['next_tag_open']    = '<li class="page-item"><span class="page-link">';
-        $config['next_tagl_close']  = '<span aria-hidden="true">&raquo;</span></span></li>';
-        $config['prev_tag_open']    = '<li class="page-item"><span class="page-link">';
-        $config['prev_tagl_close']  = '</span>Next</li>';
-        $config['first_tag_open']   = '<li class="page-item"><span class="page-link">';
-        $config['first_tagl_close'] = '</span></li>';
-        $config['last_tag_open']    = '<li class="page-item"><span class="page-link">';
-        $config['last_tagl_close']  = '</span></li>';
-        $config['base_url'] = 'http://localhost/ci-cuci/admin/employees';
-        $config['per_page'] = 5;
-        $from = $this->uri->segment(3);
-
-        if ($this->input->post('keyword')) {
-            $config['total_rows'] = $this->db->where_not_in('role_id', 1)->like('name', $this->input->post('keyword'))->get('user')->num_rows();
-            $this->pagination->initialize($config);
-
-            $this->db->where_not_in('role_id', 1);
-            $this->db->like('name', $this->input->post('keyword'));
-            $data['employees'] = $this->db->get('user', $config['per_page'], $from)->result_array();
-            $this->load->view('templates/sidebar', $data);
-            $this->load->view('templates/navbar', $data);
-            $this->load->view('admin/employees', $data);
-            $this->load->view('templates/footer');
-        } else {
-            $config['total_rows'] = $this->db->where_not_in('role_id', 1)->get('user')->num_rows();
-            $this->pagination->initialize($config);
-
-            $this->db->where_not_in('role_id', 1);
-            $data['employees'] = $this->db->get('user', $config['per_page'], $from)->result_array();
-            $this->load->view('templates/sidebar', $data);
-            $this->load->view('templates/navbar', $data);
-            $this->load->view('admin/employees', $data);
-            $this->load->view('templates/footer');
+        if ($this->session->userdata('role_id') != 1) {
+            $this->load->view('errors/html/error_403'); // Menampilkan halaman error 403
+            return;
         }
+
+        $data['title'] = 'Manajemen User';
+        $this->load->view('templates/main/header', $data);
+        $this->load->view('admin/sidebar', $data);
+        $this->load->view('admin/tambah_user');
+        $this->load->view('templates/main/footer');
     }
 
-    public function editEmployee()
+    public function proses_tambah_user()
     {
-        $this->form_validation->set_rules('is_active', 'Status active', 'required');
+        if ($this->session->userdata('role_id') != 1) {
+            $this->load->view('errors/html/error_403'); // Menampilkan halaman error 403
+            return;
+        }
+
+        $this->form_validation->set_rules('nomor_pegawai', 'Nomor Pegawai', 'required|trim|integer');
+        $this->form_validation->set_rules('nama_lengkap', 'Nama Lengkap', 'required|trim');
+        $this->form_validation->set_rules('username', 'Username', 'required|trim|is_unique[user.username]');
+        $this->form_validation->set_rules('role', 'Role', 'required');
+        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('nomor_hp', 'Nomor HP', 'required|trim|min_length[3]|integer');
+        $this->form_validation->set_rules('alamat', 'Alamat', 'required|trim|min_length[3]');
+
         if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger col-lg-3 col-sm-6" role="alert">
-            Failed to edit status active!
-            </div>');
-            redirect('admin/employees');
+            $data['title'] = 'Manajemen User';
+            $this->load->view('templates/main/header', $data);
+            $this->load->view('admin/sidebar', $data);
+            $this->load->view('admin/tambah_user');
+            $this->load->view('templates/main/footer');
         } else {
-            $a = (int)$this->input->post('is_active');
-            $this->db->set('is_active', $a);
-            $this->db->where('user_id', $this->input->post('user_id'));
-            $this->db->update('user',);
-            $this->session->set_flashdata('message', '<div class="alert alert-success col-lg-3 col-sm-6" role="alert">
-            Edit employee success!
-            </div>');
-            redirect('admin/employees');
+            date_default_timezone_set('Asia/Jakarta');
+            $datauser  = [
+                'role_id' => $this->input->post('role'),
+                'nomor_pegawai' => $this->input->post('nomor_pegawai'),
+                'username' => $this->input->post('username'),
+                'password' => password_hash("password", PASSWORD_DEFAULT),
+                'nama_lengkap' => $this->input->post('nama_lengkap'),
+                'alamat' => $this->input->post('alamat'),
+                'nomor_hp' => $this->input->post('nomor_hp'),
+                'jenis_kelamin' => $_POST['jenis_kelamin'],
+                'status_aktif' => 1,
+                'foto' => "default.jpg",
+                'tanggal_dibuat' => date('Y-m-d H:i:s')
+            ];
+            $this->db->insert('user', $datauser);
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert" style="display: inline-block;">
+                            <div>
+                                User baru berhasil ditambahkan!
+                                <i class="bi bi-check-circle-fill"></i> <!-- Menggunakan ikon tanda centang -->
+                            </div>
+                        </div>');
+            redirect('admin/user');
         }
     }
 
-    public function deleteEmployee()
+    public function edit_user()
+    {
+        if ($this->session->userdata('role_id') != 1) {
+            $this->load->view('errors/html/error_403'); // Menampilkan halaman error 403
+            return;
+        }
+
+        $user_id = $this->input->post('user_id');
+        $this->db->where('user_id', $user_id);
+        $query = $this->db->get('user');
+        $data['editUser'] = $query->result();
+
+        $data['title'] = 'Manajemen User';
+        $this->load->view('templates/main/header', $data);
+        $this->load->view('admin/sidebar', $data);
+        $this->load->view('admin/edit_user', $data);
+        $this->load->view('templates/main/footer');
+    }
+
+    public function proses_edit_user()
+    {
+        if ($this->session->userdata('role_id') != 1) {
+            $this->load->view('errors/html/error_403'); // Menampilkan halaman error 403
+            return;
+        }
+
+        $this->form_validation->set_rules('role', 'Role', 'required');
+        $this->form_validation->set_rules('status_aktif', 'Status Aktif', 'required');
+
+        $user_id = $this->input->post('user_id');
+        $this->db->where('user_id', $user_id);
+        $query = $this->db->get('user');
+        $data['editUser'] = $query->result();
+
+        if ($this->form_validation->run() == false) {
+            $data['title'] = 'Manajemen User';
+            $this->load->view('templates/main/header', $data);
+            $this->load->view('admin/sidebar', $data);
+            $this->load->view('admin/edit_user', $data);
+            $this->load->view('templates/main/footer');
+        } else {
+            $data = array(
+                'role_id' => $this->input->post('role'),
+                'status_aktif'  => $this->input->post('status_aktif')
+            );
+
+            $this->db->where('user_id', $user_id);
+            $this->db->update('user', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert" style="display: inline-block;">
+                            <div>
+                                User berhasil diubah!
+                                <i class="bi bi-check-circle-fill"></i> <!-- Menggunakan ikon tanda centang -->
+                            </div>
+                        </div>');
+            redirect('admin/user');
+        }
+    }
+
+    public function hapus_user()
     {
         $this->db->where('user_id', $this->input->post('user_id'));
         $this->db->delete('user');
-        $this->session->set_flashdata('message', '<div class="alert alert-success col-lg-3 col-sm-6" role="alert">
-                                                        Delete employee success!
-                                                        </div>');
-        redirect('admin/employees');
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert" style="display: inline-block;">
+                            <div>
+                                User berhasil dihapus!
+                                <i class="bi bi-check-circle-fill"></i> <!-- Menggunakan ikon tanda centang -->
+                            </div>
+                        </div>');
+        redirect('admin/user');
     }
 
-    public function vehicles()
+    public function profil()
     {
-        $data['title'] = "Vehicles";
-        $config['base_url'] = 'http://localhost/ci-cuci/admin/vehicles';
-        $config['per_page'] = 5;
-        $config['first_link']       = 'First';
-        $config['last_link']        = 'Last';
-        $config['next_link']        = 'Next';
-        $config['prev_link']        = 'Prev';
-        $config['full_tag_open']    = '<div class="mt-3 pagging text-center"><nav><ul class="pagination justify-content-center">';
-        $config['full_tag_close']   = '</ul></nav></div>';
-        $config['num_tag_open']     = '<li class="page-item"><span class="page-link">';
-        $config['num_tag_close']    = '</span></li>';
-        $config['cur_tag_open']     = '<li class="page-item active"><span class="page-link">';
-        $config['cur_tag_close']    = '<span class="sr-only">(current)</span></span></li>';
-        $config['next_tag_open']    = '<li class="page-item"><span class="page-link">';
-        $config['next_tagl_close']  = '<span aria-hidden="true">&raquo;</span></span></li>';
-        $config['prev_tag_open']    = '<li class="page-item"><span class="page-link">';
-        $config['prev_tagl_close']  = '</span>Next</li>';
-        $config['first_tag_open']   = '<li class="page-item"><span class="page-link">';
-        $config['first_tagl_close'] = '</span></li>';
-        $config['last_tag_open']    = '<li class="page-item"><span class="page-link">';
-        $config['last_tagl_close']  = '</span></li>';
-        $from = $this->uri->segment(3);
-
-        if ($this->input->post('keyword')) {
-            $config['total_rows'] = $this->db->like('vehicle', $this->input->post('keyword'))->get('vehicle')->num_rows();
-            $this->pagination->initialize($config);
-
-            $this->db->like('vehicle', $this->input->post('keyword'));
-            $data['vehicles'] = $this->db->get('vehicle', $config['per_page'], $from)->result_array();
-
-            $this->load->view('templates/sidebar', $data);
-            $this->load->view('templates/navbar', $data);
-            $this->load->view('admin/vehicles');
-            $this->load->view('templates/footer');
-        } else {
-            $config['total_rows'] = $this->db->get('vehicle')->num_rows();
-            $this->pagination->initialize($config);
-
-            $data['vehicles'] = $this->db->get('vehicle', $config['per_page'], $from)->result_array();
-            $this->load->view('templates/sidebar', $data);
-            $this->load->view('templates/navbar', $data);
-            $this->load->view('admin/vehicles');
-            $this->load->view('templates/footer');
+        if ($this->session->userdata('role_id') != 1) {
+            $this->load->view('errors/html/error_403'); // Menampilkan halaman error 403
+            return;
         }
+
+        $this->db->select('*');
+        $this->db->from('user');  // Ganti "nama_tabel" dengan nama tabel sesuai kebutuhan
+        $this->db->where('user_id', $this->session->userdata('user_id'));
+        $data['profile'] = $this->db->get()->result();
+
+        $data['title'] = 'Profil';
+        $this->load->view('templates/main/header', $data);
+        $this->load->view('admin/sidebar', $data);
+        $this->load->view('admin/profil', $data);
+        $this->load->view('templates/main/footer');
     }
 
-    public function addVehicle()
+    public function edit_profil()
     {
-        $this->form_validation->set_rules('vehicle_name', 'Vehicle Name', 'required|trim');
-        $this->form_validation->set_rules('price', 'Price', 'required|trim|numeric');
+        if ($this->session->userdata('role_id') != 1) {
+            $this->load->view('errors/html/error_403'); // Menampilkan halaman error 403
+            return;
+        }
+
+        $this->db->select('*');
+        $this->db->from('user');  // Ganti "nama_tabel" dengan nama tabel sesuai kebutuhan
+        $this->db->where('user_id', $this->session->userdata('user_id'));
+        $data['profile'] = $this->db->get()->result();
+
+        $data['title'] = 'Profil';
+        $this->load->view('templates/main/header', $data);
+        $this->load->view('admin/sidebar', $data);
+        $this->load->view('admin/edit_profil', $data);
+        $this->load->view('templates/main/footer');
+    }
+
+
+    public function proses_edit_profil()
+    {
+
+        if ($this->session->userdata('role_id') != 1) {
+            $this->load->view('errors/html/error_403'); // Menampilkan halaman error 403
+            return;
+        }
+
+        $user_id = $this->session->userdata('user_id');
+        $check_username = $this->db->get_where('user', array('user_id' => $user_id))->row();
+
+        $this->form_validation->set_rules('nomor_pegawai', 'Nomor Pegawai', 'required|trim|integer');
+        $this->form_validation->set_rules('nama_lengkap', 'Nama Lengkap', 'required|trim');
+        $this->form_validation->set_rules('username', 'Username', 'required|trim');
+        if ($this->input->post('username') != $check_username->username) {
+            $this->form_validation->set_rules('username', 'Username', 'is_unique[user.username]');
+        }
+        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('nomor_hp', 'Nomor HP', 'required|trim|min_length[3]|integer');
+        $this->form_validation->set_rules('alamat', 'Alamat', 'required|trim|min_length[3]');
 
         if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger col-lg-3 col-sm-6" role="alert">
-            Failed to add new vehicle!
-            </div>');
-            redirect('admin/vehicles');
+            $this->db->select('*');
+            $this->db->from('user');  // Ganti "nama_tabel" dengan nama tabel sesuai kebutuhan
+            $this->db->where('user_id', $this->session->userdata('user_id'));
+            $data['profile'] = $this->db->get()->result();
+            $data['title'] = 'Profil';
+            $this->load->view('templates/main/header', $data);
+            $this->load->view('admin/sidebar', $data);
+            $this->load->view('admin/edit_profil', $data);
+            $this->load->view('templates/main/footer');
         } else {
+            if (!empty($_FILES['foto']['name'])) {
+                // Konfigurasi upload
+                $config['upload_path'] = './assets/img/profile';
+                $config['allowed_types'] = 'jpg|jpeg|png|gif';
+                $config['max_size'] = 2048; // 2MB
+
+                $this->load->library('upload', $config);
+
+                if ($this->upload->do_upload('foto')) {
+                    // Jika berhasil diupload, ambil nama file
+                    $foto_data = $this->upload->data();
+                    $foto = $foto_data['file_name'];
+
+                    // // Update data user ke database termasuk nama foto baru
+                    $this->db->where('user_id', $user_id);
+                    $this->db->update('user', array('foto' => $foto));
+                } else {
+                    // Jika gagal upload, tampilkan error
+                    $error = array('error' => $this->upload->display_errors());
+                    print_r($error);
+                }
+            }
+
             $data = array(
-                'vehicle' => $this->input->post('vehicle_name'),
-                'price'  => $this->input->post('price')
+                'nomor_pegawai' => $this->input->post('nomor_pegawai'),
+                'username'  => $this->input->post('username'),
+                'nama_lengkap'  => $this->input->post('nama_lengkap'),
+                'jenis_kelamin'  => $this->input->post('jenis_kelamin'),
+                'alamat'  => $this->input->post('alamat'),
+                'nomor_hp'  => $this->input->post('nomor_hp')
             );
-            $this->db->insert('vehicle', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success col-lg-3 col-sm-6" role="alert">
-            Add vehicle success!
-            </div>');
-            redirect('admin/vehicles');
+            $this->db->where('user_id', $user_id);
+            $this->db->update('user', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-success mt-2" role="alert" style="display: inline-block;">
+                                <div>
+                                    Profile berhasil diubah!
+                                    <i class="bi bi-check-circle-fill"></i> <!-- Menggunakan ikon tanda centang -->
+                                </div>
+                            </div>');
+            redirect('admin/profil');
         }
     }
 
-    public function editVehicle()
+    public function ganti_password()
     {
-        $this->form_validation->set_rules('vehicle_name', 'Vehicle Name', 'required|trim');
-        $this->form_validation->set_rules('price', 'Price', 'required|trim|numeric');
+        if ($this->session->userdata('role_id') != 1) {
+            $this->load->view('errors/html/error_403'); // Menampilkan halaman error 403
+            return;
+        }
+
+        $data['title'] = 'Profil';
+        $this->load->view('templates/main/header', $data);
+        $this->load->view('admin/sidebar', $data);
+        $this->load->view('admin/ganti_password', $data);
+        $this->load->view('templates/main/footer');
+    }
+
+    public function proses_ganti_password()
+    {
+        if ($this->session->userdata('role_id') != 1) {
+            $this->load->view('errors/html/error_403'); // Menampilkan halaman error 403
+            return;
+        }
+        $this->form_validation->set_rules('password_sekarang', 'Password Sekarang', 'required|trim|callback_check_current_password');
+        $this->form_validation->set_rules('password_baru', 'Password Baru', 'required|trim|callback_check_new_password');
+        $this->form_validation->set_rules('konfirmasi_password_baru', 'Konfirmasi Password Baru', 'required|matches[password_baru]');
+
 
         if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger col-lg-3 col-sm-6" role="alert">
-            Failed to edit vehicle!
-            </div>');
-            redirect('admin/vehicles');
+            $data['title'] = 'Profil';
+            $this->load->view('templates/main/header', $data);
+            $this->load->view('admin/sidebar', $data);
+            $this->load->view('admin/ganti_password', $data);
+            $this->load->view('templates/main/footer');
         } else {
+            $hashed_password_baru = password_hash($this->input->post('password_baru'), PASSWORD_DEFAULT);
             $data = array(
-                'vehicle' => $this->input->post('vehicle_name'),
-                'price'  => $this->input->post('price')
+                'password' => $hashed_password_baru
             );
-            $this->db->where('vehicle_id', $this->input->post('vehicle_id'));
-            $this->db->update('vehicle', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success col-lg-3 col-sm-6" role="alert">
-            Edit vehicle success!
-            </div>');
-            redirect('admin/vehicles');
+            $this->db->where('user_id', $this->session->userdata('user_id'));
+            $this->db->update('user', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-success mt-2" role="alert" style="display: inline-block;">
+                                <div>
+                                    Password berhasil diubah!
+                                    <i class="bi bi-check-circle-fill"></i> <!-- Menggunakan ikon tanda centang -->
+                                </div>
+                            </div>');
+            redirect('admin/profil');
         }
     }
 
-    public function deleteVehicle()
+    public function check_current_password($current_password)
     {
-        $this->db->where('vehicle_id', $this->input->post('vehicle_id'));
-        $this->db->delete('vehicle');
-        $this->session->set_flashdata('message', '<div class="alert alert-success col-lg-3 col-sm-6" role="alert">
-                                                        Delete vehicle success!
-                                                        </div>');
-        redirect('admin/vehicles');
+        $user_id = $this->session->userdata('user_id'); // Gantilah dengan cara Anda menyimpan ID pengguna
+        $db_password = $this->db
+            ->select('password')
+            ->where('user_id', $user_id)
+            ->get('user')
+            ->row()
+            ->password;
+
+        if (!password_verify($current_password, $db_password)) {
+            $this->form_validation->set_message('check_current_password', 'Password saat ini tidak cocok');
+            return false;
+        }
+        return true;
+    }
+
+    public function check_new_password($password_baru)
+    {
+        $password_sekarang = $this->input->post('password_sekarang'); // Ambil nilai dari form
+
+        if ($password_sekarang === $password_baru) {
+            $this->form_validation->set_message('check_new_password', 'Password baru harus berbeda dengan password saat ini');
+            return false;
+        }
+        return true;
     }
 }
